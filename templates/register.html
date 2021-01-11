@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %} Register {% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1>Register Form</h1>
+
+    <ul class = "messages">
+        {% for msg in messages %}
+
+        <li>
+            <div class="alert alert-{{msg.level_tag}}" role="alert">
+                {{msg.message}}
+            </div>
+        </li>
+
+        {% endfor %}
+    </ul>
+
+    <form action="{% url 'adduser' %}" method="post">
+
+        {% csrf_token %}
+        <form>
+          <div class="form-group">
+            <label>Username</label>
+              {{form.username}}
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+              {{form.password}}
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+              {{form.email}}
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+              {{form.phone}}
+          </div>
+          <input type="submit" value="Register" class="btn btn-success">
+        </form>
+    </form>
+</div>
+
+{% endblock %}
