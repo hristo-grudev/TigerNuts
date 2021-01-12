@@ -1,9 +1,6 @@
-from django.contrib import messages
-from django.shortcuts import render, redirect
+from django.db.models import Prefetch
 from django.views.generic import ListView, DetailView
-from django.views.generic.base import View
 
-from .forms import NewsModal
 from .models import Item, ItemImages
 
 
@@ -14,11 +11,10 @@ class HomePage(ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
+		# items = Item.objects.prefetch_related(Prefetch('images'))
+		items = Item.objects.all()
 
-		items =Item.objects.all()
 		context['items'] = items
-		print(items)
-
 		return context
 
 

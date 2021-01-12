@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Register {% endblock %}
+
+{% block body %}
+
+<h1 class="text-center">Tigernuts</h1>
+
+<div class="row d-flex justify-content-center">
+
+    <form action="{% url 'view login' %}" method="POST">
+
+        {% csrf_token %}
+        {{ login_form.as_p }}
+        <button class="btn btn-primary py-3 px-5">Login</button>
+        <p>or <a href="{% url 'view register' %}">register</a></p>
+    </form>
+</div>
+
+{% endblock %}

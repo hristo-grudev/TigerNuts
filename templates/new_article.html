@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+
+{% block title %} Register {% endblock %}
+
+{% block body %}
+
+<h1 class="text-center">Tigernuts</h1>
+
+<div class="row d-flex justify-content-center">
+
+    <form action="{% url 'create article' %}" method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+        {{ form.as_table }}
+        <button class="btn btn-primary py-3 px-5">Post</button>
+    </form>
+</div>
+
+{% endblock %}

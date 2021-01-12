@@ -4,8 +4,9 @@
 
 {% block body %}
 
-<div class="container">
-    <h1>Register Form</h1>
+<h1 class="text-center">Register Form</h1>
+<div class="row d-flex justify-content-center">
+
 
     <ul class = "messages">
         {% for msg in messages %}
@@ -19,28 +20,13 @@
         {% endfor %}
     </ul>
 
-    <form action="{% url 'adduser' %}" method="post">
+    <form action="{% url 'adduser' %}" class="bg-white p-5 contact-form" method="post" enctype="multipart/form-data">
 
         {% csrf_token %}
-        <form>
-          <div class="form-group">
-            <label>Username</label>
-              {{form.username}}
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-              {{form.password}}
-          </div>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-              {{form.email}}
-          </div>
-          <div class="form-group">
-            <label>Phone</label>
-              {{form.phone}}
-          </div>
-          <input type="submit" value="Register" class="btn btn-success">
-        </form>
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+
+          <input type="submit" value="Register" class="btn btn-primary py-3 px-5">
     </form>
 </div>
 

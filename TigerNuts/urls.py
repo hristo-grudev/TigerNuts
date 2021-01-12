@@ -6,5 +6,6 @@ from accounts.views import register
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('common.urls')),
-    path('register/', include('accounts.urls'))
+    path('auth/', include('accounts.urls')),
+    path('blog/', include('blog.urls')),
 ]

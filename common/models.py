@@ -13,12 +13,20 @@ class Item(models.Model):
 	slug = models.SlugField()
 	description = models.TextField()
 
+	class Meta:
+		verbose_name_plural = 'images'
+
 	def __str__(self):
 		return self.title
 
+	def first_image(self):
+		# code to determine which image to show. The First in this case.
+		print(self.images)
+		return self.images
+
 
 class ItemImages(models.Model):
-	title = models.ForeignKey(Item, on_delete=models.CASCADE)
+	title = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='images')
 	image = models.ImageField(upload_to='images/')
 
 	def __str__(self):
