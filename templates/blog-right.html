@@ -1,27 +1,19 @@
 {% load static %}
 
-</div>
-</div>
 <div class="col-lg-4 sidebar ftco-animate">
 <div class="sidebar-box">
+{% if user.is_authenticated %}
+<p><a href="{% url 'new article' %}" class="btn btn-primary py-2 px-3">Нова публикация</a></p>
+{% endif %}
 <form action="#" class="search-form">
 <div class="form-group">
 <span class="icon ion-ios-search"></span>
-<input type="text" class="form-control" placeholder="Search...">
+<input type="text" class="form-control" placeholder="Търси...">
 </div>
 </form>
 </div>
 <div class="sidebar-box ftco-animate">
-<h3 class="heading">Categories</h3>
-<ul class="categories">
-<li><a href="#">Vegetables <span>(12)</span></a></li>
-<li><a href="#">Fruits <span>(22)</span></a></li>
-<li><a href="#">Juice <span>(37)</span></a></li>
-<li><a href="#">Dries <span>(42)</span></a></li>
-</ul>
-</div>
-<div class="sidebar-box ftco-animate">
-<h3 class="heading">Recent Blog</h3>
+<h3 class="heading">Последни</h3>
 {% for article in object_list %}
     {% if forloop.counter <= 3 %}
     <div class="block-21 mb-4 d-flex">
@@ -30,32 +22,17 @@
     <h3 class="heading-1"><a href="{% url 'view article' article.slug %}">{{article.title}}</a></h3>
     <div class="meta">
     <div><a href="#"><span class="icon-calendar"></span> {{article.date}} </a></div>
-    <div><a href="#"><span class="icon-person"></span> Admin</a></div>
-    <div><a href="#"><span class="icon-chat"></span> 19</a></div>
+    <div><a href="#"><span class="icon-person"></span> {{article.author}} </a></div>
+    <div><a href="#"><span class="icon-chat"></span> 19 </a></div>
     </div>
     </div>
     </div>
     {% endif %}
 {% endfor %}
 </div>
+
 <div class="sidebar-box ftco-animate">
-<h3 class="heading">Tag Cloud</h3>
-<div class="tagcloud">
-<a href="#" class="tag-cloud-link">fruits</a>
-<a href="#" class="tag-cloud-link">tomatoe</a>
-<a href="#" class="tag-cloud-link">mango</a>
-<a href="#" class="tag-cloud-link">apple</a>
-<a href="#" class="tag-cloud-link">carrots</a>
-<a href="#" class="tag-cloud-link">orange</a>
-<a href="#" class="tag-cloud-link">pepper</a>
-<a href="#" class="tag-cloud-link">eggplant</a>
+<h3 class="heading">Tigernuts</h3>
+<p>Като вкус, тигровите ядки се доближават най-много до лешниците.</p>
 </div>
 </div>
-<div class="sidebar-box ftco-animate">
-<h3 class="heading">Paragraph</h3>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
-</div>
-</div>
-</div>
-</div>
-</section>

@@ -8,7 +8,7 @@
 <div class="col-md-12 ftco-animate text-center">
 <h1 class="mb-2">Храна, която няма алергени</h1>
 <h2 class="subheading mb-4">Ние доставяме органични ядки</h2>
-<p><a href="#" class="btn btn-primary">Повече информация</a></p>
+<p><a href="{% url 'view about' %}" class="btn btn-primary">Повече информация</a></p>
 </div>
 </div>
 </div>
@@ -20,61 +20,13 @@
 <div class="col-sm-12 ftco-animate text-center">
 <h1 class="mb-2">100% Органична храна без глутен</h1>
 <h2 class="subheading mb-4">Ние доставяме органични ядки</h2>
-<p><a href="#" class="btn btn-primary">Повече информация</a></p>
+<p><a href="{% url 'view about' %}" class="btn btn-primary">Повече информация</a></p>
 </div>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section class="ftco-section">
-<div class="container">
-<div class="row no-gutters ftco-services">
-<div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
-<div class="media block-6 services mb-md-0 mb-4">
-<div class="icon bg-color-1 active d-flex justify-content-center align-items-center mb-2">
-<span class="flaticon-shipped"></span>
-</div>
-<div class="media-body">
-<h3 class="heading">Безплатна доставка</h3>
-<span>На поръчка над 100 лв.</span>
-</div>
-</div>
-</div>
-<div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
-<div class="media block-6 services mb-md-0 mb-4">
-<div class="icon bg-color-2 d-flex justify-content-center align-items-center mb-2">
-<span class="flaticon-diet"></span>
-</div>
-<div class="media-body">
-<h3 class="heading">Винаги пресни</h3>
-<span>Добре пакетиран продукт</span>
-</div>
-</div>
-</div>
-<div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
-<div class="media block-6 services mb-md-0 mb-4">
-<div class="icon bg-color-3 d-flex justify-content-center align-items-center mb-2">
-<span class="flaticon-award"></span>
-</div>
-<div class="media-body">
-<h3 class="heading">Превъзходно Качество</h3>
-<span>Качествени продукти</span>
-</div>
-</div>
-</div>
-<div class="col-md-3 text-center d-flex align-self-stretch ftco-animate">
-<div class="media block-6 services mb-md-0 mb-4">
-<div class="icon bg-color-4 d-flex justify-content-center align-items-center mb-2">
-<span class="flaticon-customer-service"></span>
-</div>
-<div class="media-body">
-<h3 class="heading">Работно време</h3>
-<span>24/7</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</section>
+
+{% include 'cool-line.html' %}
 

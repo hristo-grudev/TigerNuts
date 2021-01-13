@@ -1,15 +1,28 @@
 {% extends 'base.html' %}
-
+{% load static %}
 
 {% block title %} Register {% endblock %}
 
 {% block body %}
 
-<h1 class="text-center">Tigernuts</h1>
 
-<div class="row d-flex justify-content-center">
+<div class="hero-wrap hero-bread" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+<div class="container">
+<div class="row no-gutters slider-text align-items-center justify-content-center">
+<div class="col-md-9 ftco-animate text-center">
+<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span><a href="{% url 'view blog' %}">Блог</a></span></p>
+<h1 class="mb-0 bread">Блог</h1>
+</div>
+</div>
+</div>
+</div>
 
-    <form action="{% url 'create article' %}" method="POST" enctype="multipart/form-data">
+<section class="ftco-section ftco-degree-bg">
+<div class="container">
+<div class="row">
+
+<div class="col-lg-8 ftco-animate">
+    <form action="{% url 'create article' %}" method="POST" class="p-5 bg-light" enctype="multipart/form-data">
 
         {% csrf_token %}
         {{ form.as_table }}
@@ -17,4 +30,9 @@
     </form>
 </div>
 
+
+{% include 'blog-right.html' %}
+</div>
+</div>
+</section>
 {% endblock %}
