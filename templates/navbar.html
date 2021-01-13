@@ -9,11 +9,11 @@
 </div>
 <div class="col-md pr-4 d-flex topper align-items-center">
 <div class="icon mr-2 d-flex justify-content-center align-items-center"><span class="icon-paper-plane"></span></div>
-<span class="text"><a>test@email.com</a></span>
+<span class="text"><a>suport@tigernutsbulgaria.com</a></span>
 </div>
 <div class="col-md-5 pr-4 d-flex topper align-items-center text-lg-right">
 {% if user.is_authenticated %}
-<span class="text">Hello, {{ user.username }}!</span>
+<span class="text">Здравей, {{ user.username }}!</span>
 {% endif %}
 </div>
 </div>
@@ -25,21 +25,22 @@
 <div class="container">
 <a class="navbar-brand" href="{% url 'view home' %}>Tigernuts</a>
 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-<span class="oi oi-menu"></span> Menu
+<span class="oi oi-menu"></span> Меню
 </button>
 <div class="collapse navbar-collapse" id="ftco-nav">
 <ul class="navbar-nav ml-auto">
-<li class="nav-item" ><a href="{% url 'view home' %}" class="nav-link">Home</a></li>
-<li class="nav-item"><a href="{% url 'view shop' %}" class="nav-link">Shop</a></li>
-<li class="nav-item"><a href="{% url 'view wishlist' %}" class="nav-link">Wishlist</a></li>
-<li class="nav-item"><a href="{% url 'view about' %}" class="nav-link">About</a></li>
-<li class="nav-item"><a href="{% url 'view blog' %}" class="nav-link">Blog</a></li>
-<li class="nav-item"><a class="nav-link" href="{% url 'view contacts' %}">Contact</a></li>
+<li class="nav-item"><a class="nav-link"></a></li>
+<li class="nav-item"><a href="{% url 'view home' %}" class="nav-link">Начална страница</a></li>
+<li class="nav-item"><a href="{% url 'view shop' %}" class="nav-link">Магазин</a></li>
+<li class="nav-item"><a href="{% url 'view wishlist' %}" class="nav-link">Любими продукти</a></li>
+<li class="nav-item"><a href="{% url 'view about' %}" class="nav-link">За нас</a></li>
+<li class="nav-item"><a href="{% url 'view blog' %}" class="nav-link">Блог</a></li>
+<li class="nav-item"><a class="nav-link" href="{% url 'view contacts' %}">Контакти</a></li>
 <li class="nav-item cta cta-colored"><a href="{% url 'view cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
 {% if user.is_authenticated %}
-<li class="nav-item cta cta-colored"><a href="{% url 'view logout' %}" class="nav-link"><span class="flaticon-014-login"></span>Log Out</a></li>
+<li class="nav-item cta cta-colored"><a href="{% url 'view logout' %}" class="nav-link"><span class="flaticon-014-login"></span>Изход</a></li>
 {% else %}
-<li class="nav-item cta cta-colored"><a href="{% url 'view login' %}" class="nav-link"><span class="flaticon-014-login"></span>Log In</a></li>
+<li class="nav-item cta cta-colored"><a href="{% url 'view login' %}" class="nav-link"><span class="flaticon-014-login"></span>Вход</a></li>
 {% endif %}
 
 </ul>

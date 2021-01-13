@@ -18,6 +18,13 @@ class SingleArticleView(DetailView):
 	context_object_name = 'article'
 	model = Article
 
+	def get_context_data(self, **kwargs):
+		context = super(SingleArticleView, self).get_context_data()
+		object_list = Article.objects.order_by('-date')[:3]
+		context['object_list'] = object_list
+
+		return context
+
 
 class NewArticle(FormView):
 	template_name = 'new_article.html'
