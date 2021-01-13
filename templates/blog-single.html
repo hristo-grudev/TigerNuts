@@ -19,22 +19,12 @@
 <h2 class="mb-3">{{object.title}}</h2>
 <p>{{object.description}}</p>
 <p>
-<img src="{% static object.image %}" alt="" class="img-fluid">
+<img src="/media/{{object.image}}" alt="" class="img-fluid">
 </p>
 
 <div class="tag-widget post-tag-container mb-5 mt-5">
 <div class="tagcloud">
 <a href="#" class="tag-cloud-link">{{object.author}}</a>
-</div>
-</div>
-
-<div class="about-author d-flex p-4 bg-light">
-<div class="bio align-self-md-center mr-4">
-<img src="images/person_1.jpg" alt="Image placeholder" class="img-fluid mb-4">
-</div>
-<div class="desc align-self-md-center">
-<h3>Lance Smith</h3>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus itaque, autem necessitatibus voluptate quod mollitia delectus aut, sunt placeat nam vero culpa sapiente consectetur similique, inventore eos fugit cupiditate numquam!</p>
 </div>
 </div>
 
@@ -61,18 +51,19 @@
 <div class="comment-form-wrap pt-5">
 <h3 class="mb-5">Изпрати коментар</h3>
 
-   <div action="{% url 'leave comment' %}" method="POST" class="p-5 bg-light" enctype="multipart/form-data">
+   <form action="{% url 'leave comment' %}" method="POST" class="p-5 bg-light" enctype="multipart/form-data">
 
        {% csrf_token %}
        {{ form.as_p }}
        <button class="btn btn-primary py-3 px-5">Изпрати</button>
-   </div>
    </form>
+</div>
 
 </div>
 </div>
-</div>
+
  {% include 'blog-right.html' %}
+</div>
 </div>
 </div>
 

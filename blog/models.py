@@ -7,7 +7,7 @@ class Article(models.Model):
 	description = models.TextField()
 	slug = models.SlugField()
 	date = models.DateTimeField(auto_now_add=True)
-	image = models.ImageField(upload_to='media/')
+	image = models.ImageField(upload_to='media')
 	author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_of_article', default=1)
 
 	def __str__(self):

@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, FormView
 
 from blog.forms import ArticleForm, CommentForm
@@ -60,7 +60,7 @@ class CreateArticle(CreateView):
 
 	def post(self, request, *args, **kwargs):
 		form = ArticleForm(request.POST, request.FILES)
-		print(form.is_valid())
+		print(form)
 		if form.is_valid():
 			article = form.save(commit=False)
 			article.author = request.user
@@ -72,30 +72,15 @@ class CreateArticle(CreateView):
 
 class LeaveComment(CreateView):
 	model = ArticleComments
-	fields = ('message', )
+	fields = ('message',)
+	success_url = reverse_lazy("view blog")
 
-	def get_queryset(self):
-		print(get_object_or_404(Article, slug=self.kwargs['article_slug']))
-		return get_object_or_404(Article, slug=self.kwargs['article_slug'])
-
-	def get_context_data(self, **kwargs):
-		context = super(LeaveComment, self).get_context_data()
-		print(context)
-
-	def get(self, request, *args, **kwargs):
-		context = {'form': ArticleForm()}
-		return render(request, 'blog.html', context)
-
-	def post(self, request, *args, **kwargs):
-		form = ArticleForm(request.POST)
-		print(request.POST['message'])
-		if form.is_valid():
-			comment = form.save(commit=False)
-			comment.author = request.user
-			comment.article_title = 2
-			comment.save()
-			return redirect('view blog')
-		return redirect('view blog')
-
-	def get_absolute_url(self):
-		return reverse("view article", kwargs={"slug": self.slug})
+	def form_valid(self, form):
+		# comment = form.save(commit=False)
+		# comment.author = self.request.user
+		form.instance.author_id = self.request.user.id
+		form.instance.article_title_id = 2
+		# comment.article_title = 2
+		# comment.save()
+		print(2)
+		return super().form_valid(form)

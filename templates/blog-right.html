@@ -17,7 +17,7 @@
 {% for article in object_list %}
     {% if forloop.counter <= 3 %}
     <div class="block-21 mb-4 d-flex">
-    <a class="blog-img mr-4" style="background-image: url({% static article.image %});"></a>
+    <a class="blog-img mr-4" style="background-image: url(/media/{{article.image}});"></a>
     <div class="text">
     <h3 class="heading-1"><a href="{% url 'view article' article.slug %}">{{article.title}}</a></h3>
     <div class="meta">
