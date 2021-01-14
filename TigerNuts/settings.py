@@ -25,7 +25,11 @@ SECRET_KEY = 'b_1g^$$z2$)othzdhoa^*glgo2^7!)%e=$$nvs3)ac*ilg0!yo'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['baticho.pythonanywhere.com', '127.0.0.1']
+=======
+ALLOWED_HOSTS = ['baticho.pythonanywhere.com']
+>>>>>>> bd5eb0b9bee49638a90fd888558139679a0f8846
 
 
 # Application definition
