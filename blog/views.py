@@ -54,20 +54,9 @@ class CreateArticle(CreateView):
 	model = Article
 	fields = ('title', 'description', 'slug', 'image', )
 
-	def get(self, request, *args, **kwargs):
-		context = {'form': ArticleForm()}
-		return render(request, 'blog.html', context)
-
-	def post(self, request, *args, **kwargs):
-		form = ArticleForm(request.POST, request.FILES)
-		print(form)
-		if form.is_valid():
-			article = form.save(commit=False)
-			article.author = request.user
-			print(article.image)
-			article.save()
-			return redirect('view blog')
-		return redirect('view blog')
+	def form_valid(self, form):
+		form.instance.author_id = self.request.user.id
+		return super().form_valid(form)
 
 
 class LeaveComment(CreateView):
@@ -83,4 +72,3 @@ class LeaveComment(CreateView):
 		# comment.article_title = 2
 		# comment.save()
 		print(2)
-		return super().form_valid(form)

@@ -1,9 +1,16 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import transaction
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+
 from .forms import RegisterForm, LoginForm, ProfileForm
-from .models import UserProfile
-from django.contrib import messages
+
+
+class UserRegisterView(CreateView):
+    form_class = RegisterForm
+    template_name = 'register.html'
+    success_url = reverse_lazy('view home')
 
 
 def register(request):

@@ -27,15 +27,15 @@
 </div>
 </div>
 <div class="row">
-{% for item in object_list %}
+{% for item in data %}
 <div class="col-md-6 col-lg-3 ftco-animate">
 <div class="product">
-<a href="{% url 'view item' item.id %}" class="img-prod"><img class="img-fluid" src="{% static 'images\bg_1' %}" alt="Tigernuts">
-<span class="status">30%</span>
+<a href="{% url 'view item' item.id %}" class="img-prod"><img class="img-fluid" src="{% static item.image %}" alt="Tigernuts">
+<span class="status">{{item.percent}}%</span>
 <div class="overlay"></div>
 </a>
 <div class="text py-3 pb-4 px-3 text-center">
-<h3><a href="#">{{item.title}}</a></h3>
+<h3><a href="{% url 'view item' item.id %}">{{item.title}}</a></h3>
 <div class="d-flex">
 <div class="pricing">
 <p class="price"><span class="mr-2 price-dc">{{item.price|floatformat:2|intcomma}} лв.</span><span class="price-sale">{{item.discount_price|floatformat:2|intcomma}} лв.</span></p>

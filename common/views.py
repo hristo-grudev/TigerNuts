@@ -1,3 +1,5 @@
+from itertools import chain
+
 from django.db.models import Prefetch
 from django.views.generic import ListView, DetailView
 
@@ -11,10 +13,20 @@ class HomePage(ListView):
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
-		# items = Item.objects.prefetch_related(Prefetch('images'))
 		items = Item.objects.all()
-
-		context['items'] = items
+		data = []
+		for item in items:
+			pk = item.id
+			image = ItemImages.objects.filter(title=pk).first()
+			data.append({'id': item.id,
+						 'title': item.title,
+						 'discount_price': item.discount_price,
+						 'price': item.price,
+						 'percent': round((1-item.discount_price/item.price)*100),
+						 'slug': item.slug,
+						 'description': item.description,
+						 'image': image.image})
+		context['data'] = data
 		return context
 
 
@@ -40,6 +52,25 @@ class ContactsView(ListView):
 class ShopView(ListView):
 	model = Item
 	template_name = 'shop.html'
+	paginate_by = 1
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		items = Item.objects.all()
+		data = []
+		for item in items:
+			pk = item.id
+			image = ItemImages.objects.filter(title=pk).first()
+			data.append({'id': item.id,
+						 'title': item.title,
+						 'discount_price': item.discount_price,
+						 'price': item.price,
+						 'percent': round((1 - item.discount_price / item.price) * 100),
+						 'slug': item.slug,
+						 'description': item.description,
+						 'image': image.image})
+		context['data'] = data
+		return context
 
 
 class AboutView(ListView):

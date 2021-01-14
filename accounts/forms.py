@@ -47,12 +47,16 @@ class ProfileForm(forms.ModelForm):
 	class Meta:
 		model = UserProfile
 		exclude = ('user',)
+		widgets = {
+			'date_of_birth': forms.DateInput(format=('%m/%d/%Y'),
+											 attrs={'class': 'form-control', 'placeholder': 'Select a date',
+													'type': 'date'}),
+		}
 
 	def __init__(self, *args, **kwargs):
 		super(ProfileForm, self).__init__(*args, **kwargs)
 		self.fields['date_of_birth'].required = False
 		self.fields['profile_image'].required = False
-		self.fields['date_of_birth'].widget.attrs['class'] = 'form-control'
 		self.fields['profile_image'].widget.attrs['class'] = 'form-control'
 
 

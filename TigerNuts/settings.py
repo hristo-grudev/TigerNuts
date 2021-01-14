@@ -25,7 +25,7 @@ SECRET_KEY = 'b_1g^$$z2$)othzdhoa^*glgo2^7!)%e=$$nvs3)ac*ilg0!yo'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['baticho.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
@@ -61,7 +61,7 @@ ROOT_URLCONF = 'TigerNuts.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -130,8 +130,8 @@ STATICFILES_DIRS = (
 )
 STATIC_ROOT = '/tmp/static'
 
-STATIC_ROOT = '/tmp/static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = 'view blog'

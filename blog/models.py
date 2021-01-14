@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class Article(models.Model):
@@ -15,6 +16,9 @@ class Article(models.Model):
 
 	def snippet(self):
 		return self.description[:200]
+
+	def get_absolute_url(self):
+		return reverse('view article', kwargs={'slug': self.slug})
 
 	class Meta:
 		ordering = ('-date', )
