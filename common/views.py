@@ -29,7 +29,10 @@ class HomePage(ListView):
                          'description': item.description,
                          'image': image.image})
         context['data'] = data
-        cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+        if self.request.user != 'AnonymousUser':
+            cart_items = 0
+        else:
+            cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
         context['cart_items'] = cart_items
         return context
 
