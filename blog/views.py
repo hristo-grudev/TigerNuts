@@ -4,6 +4,7 @@ from django.views.generic import ListView, DetailView, CreateView, FormView
 
 from blog.forms import ArticleForm, CommentForm
 from blog.models import Article, ArticleComments
+from common.models import OrderItem
 
 
 class ArticleView(ListView):
@@ -11,6 +12,12 @@ class ArticleView(ListView):
 	template_name = 'blog.html'
 	context_object_name = 'blog'
 	model = Article
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+		context['cart_items'] = cart_items
+		return context
 
 
 class SingleArticleView(DetailView):
@@ -24,6 +31,8 @@ class SingleArticleView(DetailView):
 		object_list = Article.objects.order_by('date')[:3]
 		form = CommentForm()
 		comments = ArticleComments.objects.filter(article_title__exact=context['object'])
+		cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+		context['cart_items'] = cart_items
 		context['object_list'] = object_list
 		context['comments'] = comments
 		context['form'] = form
@@ -46,6 +55,8 @@ class NewArticle(FormView):
 		context = super(NewArticle, self).get_context_data()
 		object_list = Article.objects.order_by('-date')[:3]
 		context['object_list'] = object_list
+		cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+		context['cart_items'] = cart_items
 
 		return context
 
@@ -57,6 +68,12 @@ class CreateArticle(CreateView):
 	def form_valid(self, form):
 		form.instance.author_id = self.request.user.id
 		return super().form_valid(form)
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+		context['cart_items'] = cart_items
+		return context
 
 
 class LeaveComment(CreateView):

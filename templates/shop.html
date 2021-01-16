@@ -20,7 +20,7 @@
 {% for item in data %}
 <div class="col-md-6 col-lg-3 ftco-animate">
 <div class="product">
-<a href="{% url 'view item' item.id %}" class="img-prod"><img class="img-fluid" src="{% static item.image %}" alt="Tigernuts">
+<a href="{% url 'view item' item.slug %}" class="img-prod"><img class="img-fluid" src="{% static item.image %}" alt="Tigernuts" height="124">
 <span class="status">{{item.percent}}%</span>
 <div class="overlay"></div>
 </a>
@@ -33,9 +33,14 @@
 </div>
 <div class="bottom-area d-flex px-3">
 <div class="m-auto d-flex">
-<a href="#" class="add-to-cart d-flex justify-content-center align-items-center text-center">
+<form id="myForm" action="{% url 'add-to-cart' item.id %}" method="post">
+{% csrf_token %}
+<button style="background:transparent; border:none; color:transparent;" type="submit">
+<a href="" class="d-flex justify-content-center align-items-center text-center">
 <span><i class="ion-ios-menu"></i></span>
 </a>
+</button>
+</form>
 <a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
 <span><i class="ion-ios-cart"></i></span>
 </a>

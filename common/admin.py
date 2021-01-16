@@ -1,8 +1,9 @@
 from django.contrib import admin
 
 from accounts.models import UserProfile
-from common.models import Item, ItemImages
+from common.models import Item, ItemImages, OrderItem
 
 admin.site.register(Item)
 admin.site.register(ItemImages)
 admin.site.register(UserProfile)
+admin.site.register(OrderItem)

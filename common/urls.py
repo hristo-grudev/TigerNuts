@@ -1,13 +1,18 @@
 from django.urls import path
 
-from common.views import HomePage, ItemDetailsView, ContactsView, ShopView, AboutView, BlogView, WishListView, CartView
+from common.views import HomePage, ItemDetailsView, ContactsView, ShopView, AboutView, AddToCart, WishListView, \
+	CartView, RemoveItemFromCart, CheckOutView, BuyItNow
 
 urlpatterns = [
 	path('', HomePage.as_view(), name='view home'),
 	path('contacts/', ContactsView.as_view(), name='view contacts'),
 	path('shop/', ShopView.as_view(), name='view shop'),
-	path('shop/<int:pk>', ItemDetailsView.as_view(), name='view item'),
+	path('shop/<slug:slug>', ItemDetailsView.as_view(), name='view item'),
 	path('about/', AboutView.as_view(), name='view about'),
 	path('wishlist/', WishListView.as_view(), name='view wishlist'),
 	path('cart/', CartView.as_view(), name='view cart'),
+	path('add-to-cart/<slug:slug>/', AddToCart.as_view(), name='add-to-cart'),
+	path('delete-from-cart/<int:id>/', RemoveItemFromCart.as_view(), name='delete-from-cart'),
+	path('checkout/', CheckOutView.as_view(), name='view checkout'),
+	path('buy/', BuyItNow.as_view(), name='view buy'),
 ]
