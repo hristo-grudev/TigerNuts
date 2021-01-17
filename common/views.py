@@ -158,12 +158,25 @@ class BuyItNow(RedirectView):
 
     def post(self, request, *args, **kwargs):
         item_id = kwargs['slug']
+        device = self.request.COOKIES['device']
+
+        devices = User.objects.filter(username__exact=device).exists()
+
+        if self.request.user.is_authenticated:
+            user = self.request.user
+        else:
+            if not devices:
+                user, created = User.objects.get_or_create(username=device)
+            else:
+                user = User.objects.filter(username__exact=device).first()
+
         item = Item.objects.filter(id__exact=item_id)
-        cart_items = OrderItem.objects.filter(ordered=False).filter(user=self.request.user).filter(item=item[0])
+        print(item, user)
+        cart_items = OrderItem.objects.filter(ordered=False).filter(user=user).filter(item=item[0])
         if cart_items:
             cart_items.update(quantity=F('quantity') + 1)
         else:
-            OrderItem(user=request.user, ordered=False, item=item[0], quantity=1).save()
+            OrderItem(user=user, ordered=False, item=item[0], quantity=1).save()
         return super(BuyItNow, self).post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -212,9 +225,8 @@ class CartView(ListView):
                          'total': item.get_total_item_price,
                          'image': image.image})
         context['delivery'] = 0
-        if grand_total_price < 100:
+        if 0 < grand_total_price < 100:
             context['delivery'] = 5
-            grand_total_price += 5
         context['cart_details'] = cart_details
         context['data'] = data
         context['grand_total_price'] = grand_total_price

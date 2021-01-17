@@ -56,6 +56,8 @@
 {% endfor %}
 </tbody>
 </table>
+<p><a href="{% url 'view cart' %}" class="btn btn-primary py-3 px-4">Обнови Количка</a></p>
+
 </div>
 </div>
 </div>
@@ -112,7 +114,7 @@
 <hr>
 <p class="d-flex total-price">
 <span>Общо</span>
-<span>{{grand_total_price|floatformat:2|intcomma}} лв.</span>
+<span>{{grand_total_price|add:delivery|floatformat:2|intcomma}} лв.</span>
 </p>
 </div>
 <p><a href="{% url 'view checkout' %}" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
