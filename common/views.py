@@ -5,13 +5,14 @@ from django.urls import reverse
 from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic.base import RedirectView
 
-from accounts.models import UserProfile
-from .forms import ItemForm
 from .models import Item, ItemImages, OrderItem
 
 
 def get_cart_items(request):
-    device = request.COOKIES['device']
+    try:
+        device = request.COOKIES['device']
+    except:
+        device = None
     devices = User.objects.filter(username__exact=device).exists()
     if request.user.is_authenticated:
         user = request.user.id

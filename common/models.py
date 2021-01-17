@@ -136,3 +136,8 @@ class Coupon(models.Model):
 
     def __str__(self):
         return self.code
+
+
+class WishList(models.Model):
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -12,7 +12,10 @@ def get_user(request):
 	if request.user.is_authenticated:
 		user = request.user
 	else:
-		device = request.COOKIES['device']
+		try:
+			device = request.COOKIES['device']
+		except:
+			device = None
 		user = User.objects.filter(username__exact=device).first()
 	return user
 
