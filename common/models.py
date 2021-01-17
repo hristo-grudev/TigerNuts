@@ -11,6 +11,10 @@ ADDRESS_CHOICES = (
     ('S', 'Shipping'),
 )
 
+COUNTRY_CHOICES = (
+    ('BG', 'Bulgaria'),
+)
+
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
@@ -104,7 +108,7 @@ class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     street_address = models.CharField(max_length=100)
     apartment_address = models.CharField(max_length=100)
-    country = models.CharField(max_length=100)
+    country = models.CharField(choices=COUNTRY_CHOICES, max_length=100)
     zip = models.CharField(max_length=100)
     address_type = models.CharField(max_length=1, choices=ADDRESS_CHOICES)
     default = models.BooleanField(default=False)
