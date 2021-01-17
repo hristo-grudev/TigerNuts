@@ -14,8 +14,8 @@ ADDRESS_CHOICES = (
 
 class Item(models.Model):
     title = models.CharField(max_length=100)
-    price = models.FloatField()
-    discount_price = models.FloatField(blank=True, null=True)
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    discount_price = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
     slug = models.SlugField()
     description = models.TextField()

@@ -26,7 +26,7 @@
 <div class="overlay"></div>
 </a>
 <div class="text py-3 pb-4 px-3 text-center">
-<h3><a href="{% url 'view item' item.id %}">{{item.title}}</a></h3>
+<h3><a href="{% url 'view item' item.slug %}">{{item.title}}</a></h3>
 <div class="d-flex">
 <div class="pricing">
 <p class="price"><span class="mr-2 price-dc">{{item.price|floatformat:2|intcomma}} лв.</span><span class="price-sale">{{item.discount_price|floatformat:2|intcomma}} лв.</span></p>
@@ -42,9 +42,14 @@
 </a>
 </button>
 </form>
+<form action="{% url 'buy-it-now' item.id %}" method="post">
+{% csrf_token %}
+<button style="background:transparent; border:none; color:transparent;" type="submit">
 <a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
-<span><i class="ion-ios-cart"></i></span>
+    <span><i class="ion-ios-cart"></i></span>
 </a>
+</button>
+</form>
 <a href="#" class="heart d-flex justify-content-center align-items-center ">
 <span><i class="ion-ios-heart"></i></span>
 </a>

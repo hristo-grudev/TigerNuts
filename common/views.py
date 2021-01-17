@@ -1,11 +1,28 @@
+from django.contrib.auth.models import User
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, DeleteView
 from django.views.generic.base import RedirectView
 
+from accounts.models import UserProfile
 from .forms import ItemForm
 from .models import Item, ItemImages, OrderItem
+
+
+def get_cart_items(request):
+    device = request.COOKIES['device']
+    devices = User.objects.filter(username__exact=device).exists()
+    if request.user.is_authenticated:
+        user = request.user.id
+    else:
+        if not devices:
+            user, created = User.objects.get_or_create(username=device)
+        else:
+            user = User.objects.filter(username__exact=device).first()
+
+    cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
+    return cart_items
 
 
 class HomePage(ListView):
@@ -29,11 +46,9 @@ class HomePage(ListView):
                          'description': item.description,
                          'image': image.image})
         context['data'] = data
-        if self.request.user != 'AnonymousUser':
-            cart_items = 0
-        else:
-            cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+        cart_items = get_cart_items(self.request)
         context['cart_items'] = cart_items
+
         return context
 
 
@@ -58,7 +73,7 @@ class ContactsView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+        cart_items = get_cart_items(self.request)
         context['cart_items'] = cart_items
         return context
 
@@ -85,7 +100,7 @@ class ShopView(ListView):
                          'description': item.description,
                          'image': image.image})
         context['data'] = data
-        cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+        cart_items = get_cart_items(self.request)
         context['cart_items'] = cart_items
 
         return context
@@ -97,7 +112,7 @@ class AboutView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+        cart_items = get_cart_items(self.request)
         context['cart_items'] = cart_items
         return context
 
@@ -108,18 +123,30 @@ class AddToCart(RedirectView):
 
     def post(self, request, *args, **kwargs):
         item_id = kwargs['slug']
-        print(item_id)
+        device = self.request.COOKIES['device']
+
+        devices = User.objects.filter(username__exact=device).exists()
+
+        if self.request.user.is_authenticated:
+            user = self.request.user
+        else:
+            if not devices:
+                user, created = User.objects.get_or_create(username=device)
+            else:
+                user = User.objects.filter(username__exact=device).first()
+
         item = Item.objects.filter(id__exact=item_id)
-        cart_items = OrderItem.objects.filter(ordered=False).filter(user=self.request.user).filter(item=item[0])
+        print(item, user)
+        cart_items = OrderItem.objects.filter(ordered=False).filter(user=user).filter(item=item[0])
         if cart_items:
             cart_items.update(quantity=F('quantity') + 1)
         else:
-            OrderItem(user=request.user, ordered=False, item=item[0], quantity=1).save()
+            OrderItem(user=user, ordered=False, item=item[0], quantity=1).save()
         return super(AddToCart, self).post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+        cart_items = get_cart_items(self.request)
         context['cart_items'] = cart_items
         return context
 
@@ -130,18 +157,17 @@ class BuyItNow(RedirectView):
 
     def post(self, request, *args, **kwargs):
         item_id = kwargs['slug']
-        print(item_id)
         item = Item.objects.filter(id__exact=item_id)
         cart_items = OrderItem.objects.filter(ordered=False).filter(user=self.request.user).filter(item=item[0])
         if cart_items:
             cart_items.update(quantity=F('quantity') + 1)
         else:
             OrderItem(user=request.user, ordered=False, item=item[0], quantity=1).save()
-        return super(AddToCart, self).post(request, *args, **kwargs)
+        return super(BuyItNow, self).post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+        cart_items = get_cart_items(self.request)
         context['cart_items'] = cart_items
         return context
 
@@ -152,7 +178,7 @@ class WishListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+        cart_items = get_cart_items(self.request)
         context['cart_items'] = cart_items
         return context
 
@@ -163,8 +189,13 @@ class CartView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
-        cart_details = OrderItem.objects.filter(user=self.request.user).filter(ordered=False)
+        cart_items = get_cart_items(self.request)
+        if self.request.user.is_authenticated:
+            user = self.request.user
+        else:
+            device = self.request.COOKIES['device']
+            user = User.objects.filter(username__exact=device).first()
+        cart_details = OrderItem.objects.filter(user=user).filter(ordered=False)
         context['cart_items'] = cart_items
         data = []
         grand_total_price = 0
