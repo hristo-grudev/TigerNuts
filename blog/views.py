@@ -15,7 +15,7 @@ def get_user(request):
 		try:
 			device = request.COOKIES['device']
 		except:
-			device = None
+			device = ''
 		user = User.objects.filter(username__exact=device).first()
 	return user
 

@@ -12,7 +12,7 @@ def get_cart_items(request):
     try:
         device = request.COOKIES['device']
     except:
-        device = None
+        device = ''
     devices = User.objects.filter(username__exact=device).exists()
     if request.user.is_authenticated:
         user = request.user.id
