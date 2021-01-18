@@ -1,11 +1,12 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
-from django.views.generic import ListView, DetailView, DeleteView
+from django.views.generic import ListView, DetailView, DeleteView, CreateView
 from django.views.generic.base import RedirectView
 
-from .models import Item, ItemImages, OrderItem
+from .models import Item, ItemImages, OrderItem, WishList
 
 
 def get_cart_items(request, create):
@@ -192,8 +193,33 @@ class WishListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        try:
+            device = self.request.COOKIES['device']
+        except:
+            device = ''
+        if self.request.user.is_authenticated:
+            user = self.request.user.id
+        else:
+            user = User.objects.filter(username__exact=device).first()
+        wish_list = WishList.objects.filter(user=user)
+        context['wish_list'] = wish_list
+        data = []
+        for item in wish_list:
+            pk = item.item
+            image = ItemImages.objects.filter(title=pk).first()
+            item_details = Item.objects.filter(title=pk)
+            data.append({'id': item_details[0].id,
+                         'title': item_details[0].title,
+                         'discount_price': item_details[0].discount_price,
+                         'price': item_details[0].price,
+                         'percent': round((1 - item_details[0].discount_price / item_details[0].price) * 100),
+                         'slug': item_details[0].slug,
+                         'description': item_details[0].description,
+                         'image': image.image})
+
         cart_items = get_cart_items(self.request, False)
         context['cart_items'] = cart_items
+        context['data'] = data
         return context
 
 
@@ -246,3 +272,32 @@ class RemoveItemFromCart(DeleteView):
 class CheckOutView(ListView):
     model = OrderItem
     template_name = 'checkout.html'
+
+
+class AddToFavorites(RedirectView):
+    model = WishList
+    # success_url = '/shop/'
+    http_method_names = ['post']
+    url = '/shop/'
+
+    def post(self, request, *args, **kwargs):
+        item_id = kwargs['id']
+        device = self.request.COOKIES['device']
+
+        devices = User.objects.filter(username__exact=device).exists()
+
+        if self.request.user.is_authenticated:
+            user = self.request.user
+        else:
+            if not devices:
+                user, created = User.objects.get_or_create(username=device)
+            else:
+                user = User.objects.filter(username__exact=device).first()
+
+        item = Item.objects.filter(id__exact=item_id)
+        try:
+            WishList.objects.get(user=user, item=item[0]).delete()
+        except:
+            WishList(user=user, item=item[0]).save()
+
+        return super(AddToFavorites, self).post(request, *args, **kwargs)

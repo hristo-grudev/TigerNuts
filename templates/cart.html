@@ -64,41 +64,26 @@
 <div class="row justify-content-end">
 <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 <div class="cart-total mb-3">
-<h3>Coupon Code</h3>
-<p>Enter your coupon code if you have one</p>
+<h3>Ваучер код</h3>
+<p>Въведете номер на ваучер ако имате.</p>
 <form action="#" class="info">
 <div class="form-group">
-<label for="">Coupon code</label>
+<label for="">Ваучер код</label>
 <input type="text" class="form-control text-left px-3" placeholder="">
 </div>
 </form>
 </div>
-<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Apply Coupon</a></p>
+<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Използвай ваучер</a></p>
 </div>
 <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 <div class="cart-total mb-3">
-<h3>Estimate shipping and tax</h3>
-<p>Enter your destination to get a shipping estimate</p>
-<form action="#" class="info">
-<div class="form-group">
-<label for="">Country</label>
-<input type="text" class="form-control text-left px-3" placeholder="">
+<h3>Безплатна доставка над 100 лв.</h3>
+
 </div>
-<div class="form-group">
-<label for="country">State/Province</label>
-<input type="text" class="form-control text-left px-3" placeholder="">
-</div>
-<div class="form-group">
-<label for="country">Zip/Postal Code</label>
-<input type="text" class="form-control text-left px-3" placeholder="">
-</div>
-</form>
-</div>
-<p><a href="checkout.html" class="btn btn-primary py-3 px-4">Estimate</a></p>
 </div>
 <div class="col-lg-4 mt-5 cart-wrap ftco-animate">
 <div class="cart-total mb-3">
-<h3>Cart Totals</h3>
+<h3>Количка общо</h3>
 <p class="d-flex">
 <span>Междинна сума</span>
 <span>{{grand_total_price|floatformat:2|intcomma}} лв.</span>
@@ -117,7 +102,7 @@
 <span>{{grand_total_price|add:delivery|floatformat:2|intcomma}} лв.</span>
 </p>
 </div>
-<p><a href="{% url 'view checkout' %}" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
+<p><a href="{% url 'view checkout' %}" class="btn btn-primary py-3 px-4">Към плащане</a></p>
 </div>
 </div>
 </div>

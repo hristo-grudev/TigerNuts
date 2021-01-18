@@ -44,16 +44,20 @@
 <form action="{% url 'buy-it-now' item.id %}" method="post">
 {% csrf_token %}
 <button style="background:transparent; border:none; color:transparent;" type="submit">
-<a href="#" class="buy-now d-flex justify-content-center align-items-center mx-1">
+<a class="buy-now d-flex justify-content-center align-items-center mx-1">
     <span><i class="ion-ios-cart"></i></span>
 </a>
 </button>
 </form>
 
-
-<a href="#" class="heart d-flex justify-content-center align-items-center ">
-<span><i class="ion-ios-heart"></i></span>
-</a>
+<form action="{% url 'add-to-favorites' item.id %}" method="post">
+    {% csrf_token %}
+    <button style="background:transparent; border:none; color:transparent;" type="submit">
+        <a class="heart d-flex justify-content-center align-items-center ">
+            <span><i class="ion-ios-heart"></i></span>
+        </a>
+    </button>
+</form>
 </div>
 </div>
 </div>
