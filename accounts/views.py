@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 from django.db import transaction
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
@@ -30,7 +31,12 @@ def register_user(request):
         }
         return render(request, 'register.html', context)
     else:
-        user_form = RegisterForm(data=request.POST)
+        device = request.COOKIES['device']
+        user_exist = User.objects.filter(username__exact=device).first()
+        if user_exist.username == device:
+            user_form = RegisterForm(data=request.POST, instance=user_exist)
+        else:
+            user_form = RegisterForm(data=request.POST)
         profile_form = ProfileForm(data=request.POST, files=request.FILES)
         print(profile_form.errors)
         if user_form.is_valid() and profile_form.is_valid():

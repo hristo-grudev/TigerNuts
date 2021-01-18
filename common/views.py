@@ -8,7 +8,7 @@ from django.views.generic.base import RedirectView
 from .models import Item, ItemImages, OrderItem
 
 
-def get_cart_items(request):
+def get_cart_items(request, create):
     try:
         device = request.COOKIES['device']
     except:
@@ -17,7 +17,7 @@ def get_cart_items(request):
     if request.user.is_authenticated:
         user = request.user.id
     else:
-        if not devices:
+        if not devices and create is True:
             user, created = User.objects.get_or_create(username=device)
         else:
             user = User.objects.filter(username__exact=device).first()
@@ -47,7 +47,7 @@ class HomePage(ListView):
                          'description': item.description,
                          'image': image.image})
         context['data'] = data
-        cart_items = get_cart_items(self.request)
+        cart_items = get_cart_items(self.request, False)
         context['cart_items'] = cart_items
 
         return context
@@ -74,7 +74,7 @@ class ContactsView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = get_cart_items(self.request)
+        cart_items = get_cart_items(self.request, False)
         context['cart_items'] = cart_items
         return context
 
@@ -101,7 +101,7 @@ class ShopView(ListView):
                          'description': item.description,
                          'image': image.image})
         context['data'] = data
-        cart_items = get_cart_items(self.request)
+        cart_items = get_cart_items(self.request, False)
         context['cart_items'] = cart_items
 
         return context
@@ -113,7 +113,7 @@ class AboutView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = get_cart_items(self.request)
+        cart_items = get_cart_items(self.request, False)
         context['cart_items'] = cart_items
         return context
 
@@ -147,7 +147,7 @@ class AddToCart(RedirectView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = get_cart_items(self.request)
+        cart_items = get_cart_items(self.request, True)
         context['cart_items'] = cart_items
         return context
 
@@ -181,7 +181,7 @@ class BuyItNow(RedirectView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = get_cart_items(self.request)
+        cart_items = get_cart_items(self.request, True)
         context['cart_items'] = cart_items
         return context
 
@@ -192,7 +192,7 @@ class WishListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = get_cart_items(self.request)
+        cart_items = get_cart_items(self.request, False)
         context['cart_items'] = cart_items
         return context
 
@@ -203,7 +203,7 @@ class CartView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = get_cart_items(self.request)
+        cart_items = get_cart_items(self.request, False)
         if self.request.user.is_authenticated:
             user = self.request.user
         else:

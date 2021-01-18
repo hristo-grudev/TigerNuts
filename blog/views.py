@@ -19,6 +19,7 @@ def get_user(request):
 		user = User.objects.filter(username__exact=device).first()
 	return user
 
+
 class ArticleView(ListView):
 	permission_required = 'accounts.action_all'
 	template_name = 'blog.html'
