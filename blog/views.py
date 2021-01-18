@@ -105,4 +105,3 @@ class LeaveComment(CreateView):
 		form.instance.article_title_id = 2
 		# comment.article_title = 2
 		# comment.save()
-		print(2)
