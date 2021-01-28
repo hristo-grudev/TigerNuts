@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'blog',
     'django.contrib.humanize',
     'django_static_ionicons',
+    'phone_field',
 
 ]
 

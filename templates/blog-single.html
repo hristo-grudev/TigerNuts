@@ -16,6 +16,14 @@
 <div class="container">
 <div class="row">
 <div class="col-lg-8 ftco-animate">
+{% if user == object.author or user_group %}
+    <div class="tag-widget post-tag-container mb-5 mt-5">
+        <div class="tagcloud">
+            <a href="{% url 'edit article' object.slug %}" class="btn btn-primary py-2 px-3">Редактирай</a>
+            <a href="{% url 'delete article' object.slug %}" class="btn btn-danger py-2 px-3">Изтрий</a>
+        </div>
+    </div>
+{% endif %}
 <h2 class="mb-3">{{object.title}}</h2>
 <p>{{object.description|safe}}</p>
 <p>
@@ -29,7 +37,7 @@
 </div>
 
 <div class="pt-5 mt-5">
-<h3 class="mb-5">6 Comments</h3>
+<h3 class="mb-5">{{comments_count}} коментара</h3>
 <ul class="comment-list">
 
 {% for comment in comments %}
@@ -41,7 +49,14 @@
 <h3>{{comment.author}}</h3>
 <div class="meta">{{comment.date}}</div>
 <p>{{comment.message}}</p>
-<p><a href="#" class="reply">Reply</a></p>
+{% if user == comment.author or user_group %}
+<div class="tag-widget post-tag-container mb-5 mt-5">
+    <div class="tagcloud">
+        <a href="{% url 'edit comment' object.slug comment.id %}" class="btn btn-primary py-2 px-3">Редактирай</a>
+        <a href="{% url 'delete comment' object.slug comment.id %}" class="btn btn-danger py-2 px-3">Изтрий</a>
+    </div>
+</div>
+{% endif %}
 </div>
 </li>
 {% endfor %}
@@ -51,7 +66,7 @@
 <div class="comment-form-wrap pt-5">
 <h3 class="mb-5">Изпрати коментар</h3>
 
-   <form action="{% url 'leave comment' %}" method="POST" class="p-5 bg-light" enctype="multipart/form-data">
+   <form action="{% url 'leave comment' object.slug %}" method="POST" class="p-5 bg-light" enctype="multipart/form-data">
 
        {% csrf_token %}
        {{ form.as_p }}

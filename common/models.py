@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from phone_field import PhoneField
 
 CATEGORY_CHOICES = (
     ('R', 'RAW'),
@@ -106,11 +107,15 @@ class Order(models.Model):
 
 class Address(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    street_address = models.CharField(max_length=100)
-    apartment_address = models.CharField(max_length=100)
-    country = models.CharField(choices=COUNTRY_CHOICES, max_length=100)
-    zip = models.CharField(max_length=100)
-    address_type = models.CharField(max_length=1, choices=ADDRESS_CHOICES)
+    first_name = models.CharField(max_length=100, default='')
+    last_name = models.CharField(max_length=100, default='')
+    town = models.CharField(max_length=100, default='')
+    street_address = models.CharField(max_length=100, default='')
+    apartment_address = models.CharField(max_length=100, default='')
+    country = models.CharField(choices=COUNTRY_CHOICES, max_length=100, default='')
+    zip = models.CharField(max_length=100, default='')
+    phone = PhoneField(default='')
+    email = models.EmailField(max_length=254, default='')
     default = models.BooleanField(default=False)
 
     def __str__(self):

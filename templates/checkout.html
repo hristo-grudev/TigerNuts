@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block body %}
 <div class="hero-wrap hero-bread" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
@@ -17,33 +18,28 @@
 <div class="row justify-content-center">
 <div class="col-xl-7 ftco-animate">
 <form action="#" class="billing-form">
-<h3 class="mb-4 billing-heading">Billing Details</h3>
+<h3 class="mb-4 billing-heading">Адрес за доставка</h3>
 <div class="row align-items-end">
 <div class="col-md-6">
 <div class="form-group">
-<label for="firstname">Firt Name</label>
+<label for="firstname">Име</label>
 <input type="text" class="form-control" placeholder="">
 </div>
 </div>
 <div class="col-md-6">
 <div class="form-group">
-<label for="lastname">Last Name</label>
+<label for="lastname">Фамилия</label>
 <input type="text" class="form-control" placeholder="">
 </div>
 </div>
 <div class="w-100"></div>
 <div class="col-md-12">
 <div class="form-group">
-<label for="country">State / Country</label>
+<label for="country">Държава</label>
 <div class="select-wrap">
 <div class="icon"><span class="ion-ios-arrow-down"></span></div>
 <select name="" id="" class="form-control">
-<option value="">France</option>
-<option value="">Italy</option>
-<option value="">Philippines</option>
-<option value="">South Korea</option>
-<option value="">Hongkong</option>
-<option value="">Japan</option>
+<option value="">България</option>
 </select>
 </div>
 </div>
@@ -51,8 +47,8 @@
 <div class="w-100"></div>
 <div class="col-md-6">
 <div class="form-group">
-<label for="streetaddress">Street Address</label>
-<input type="text" class="form-control" placeholder="House number and street name">
+<label for="streetaddress">Адрес</label>
+<input type="text" class="form-control" placeholder="Улица и номер">
 </div>
 </div>
 <div class="col-md-6">
@@ -63,26 +59,26 @@
 <div class="w-100"></div>
 <div class="col-md-6">
 <div class="form-group">
-<label for="towncity">Town / City</label>
+<label for="towncity">Населено място</label>
 <input type="text" class="form-control" placeholder="">
 </div>
 </div>
 <div class="col-md-6">
 <div class="form-group">
-<label for="postcodezip">Postcode / ZIP *</label>
+<label for="postcodezip">Пощенски код</label>
 <input type="text" class="form-control" placeholder="">
 </div>
 </div>
 <div class="w-100"></div>
 <div class="col-md-6">
 <div class="form-group">
-<label for="phone">Phone</label>
+<label for="phone">Телефон</label>
 <input type="text" class="form-control" placeholder="">
 </div>
 </div>
 <div class="col-md-6">
 <div class="form-group">
-<label for="emailaddress">Email Address</label>
+<label for="emailaddress">Е-мейл адрес</label>
 <input type="text" class="form-control" placeholder="">
 </div>
 </div>
@@ -102,54 +98,54 @@
 <div class="row mt-5 pt-3">
 <div class="col-md-12 d-flex mb-5">
 <div class="cart-detail cart-total p-3 p-md-4">
-<h3 class="billing-heading mb-4">Cart Total</h3>
+<h3 class="billing-heading mb-4">Количка</h3>
 <p class="d-flex">
-<span>Subtotal</span>
-<span>$20.60</span>
+<span>Междинна сума</span>
+<span>{{grand_total_price|floatformat:2|intcomma}} лв.</span>
 </p>
 <p class="d-flex">
-<span>Delivery</span>
-<span>$0.00</span>
+<span>Доставка</span>
+<span>{{delivery|floatformat:2|intcomma}} лв.</span>
 </p>
 <p class="d-flex">
-<span>Discount</span>
-<span>$3.00</span>
+<span>Отстъпка</span>
+<span>0.00 лв.</span>
 </p>
 <hr>
 <p class="d-flex total-price">
-<span>Total</span>
-<span>$17.60</span>
+<span>Общо</span>
+<span>{{grand_total_price|add:delivery|floatformat:2|intcomma}} лв.</span>
 </p>
 </div>
 </div>
 <div class="col-md-12">
 <div class="cart-detail p-3 p-md-4">
-<h3 class="billing-heading mb-4">Payment Method</h3>
+<h3 class="billing-heading mb-4">Начин на плащане</h3>
 <div class="form-group">
 <div class="col-md-12">
 <div class="radio">
-<label><input type="radio" name="optradio" class="mr-2"> Direct Bank Tranfer</label>
-</div>
-</div>
-</div>
-<div class="form-group">
-<div class="col-md-12">
-<div class="radio">
-<label><input type="radio" name="optradio" class="mr-2"> Visa/Mastercard</label>
+<label><input type="radio" name="optradio" class="mr-2"> Директен банков трансфер</label>
 </div>
 </div>
 </div>
 <div class="form-group">
 <div class="col-md-12">
 <div class="radio">
-<label><input type="radio" name="optradio" class="mr-2"> Paypal</label>
+<label><input type="radio" name="optradio" class="mr-2"> С кредитна/дебитна карта онлайн</label>
+</div>
+</div>
+</div>
+<div class="form-group">
+<div class="col-md-12">
+<div class="radio">
+<label><input type="radio" name="optradio" class="mr-2"> Наложен платеж (плащане в брой на куриера при доставка)</label>
 </div>
 </div>
 </div>
 <div class="form-group">
 <div class="col-md-12">
 <div class="checkbox">
-<label><input type="checkbox" value="" class="mr-2"> I have read and accept the terms and conditions</label>
+<label><input type="checkbox" value="" class="mr-2"> Прочетох и разбрах политиката за поверителност с подробна и допълнителна информация и съм съгласен/а с нея.</label>
 </div>
 </div>
 </div>

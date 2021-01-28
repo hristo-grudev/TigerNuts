@@ -33,5 +33,7 @@ class ArticleComments(models.Model):
 	def __str__(self):
 		return f'{self.author} - {self.article_title}'
 
+
+
 	class Meta:
 		ordering = ('date', )

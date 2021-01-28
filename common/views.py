@@ -273,6 +273,37 @@ class CheckOutView(ListView):
     model = OrderItem
     template_name = 'checkout.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        cart_items = get_cart_items(self.request, False)
+        if self.request.user.is_authenticated:
+            user = self.request.user
+        else:
+            device = self.request.COOKIES['device']
+            user = User.objects.filter(username__exact=device).first()
+        cart_details = OrderItem.objects.filter(user=user).filter(ordered=False)
+        context['cart_items'] = cart_items
+        data = []
+        grand_total_price = 0
+        for item in cart_details:
+            pk = item.item.id
+            image = ItemImages.objects.filter(title=pk).first()
+            grand_total_price += item.get_total_item_price()
+            data.append({'title': item.item.title,
+                         'id': item.id,
+                         'discount_price': item.item.discount_price,
+                         'price': item.item.price,
+                         'quantity': item.quantity,
+                         'total': item.get_total_item_price,
+                         'image': image.image})
+        context['delivery'] = 0
+        if 0 < grand_total_price < 100:
+            context['delivery'] = 5
+        context['cart_details'] = cart_details
+        context['data'] = data
+        context['grand_total_price'] = grand_total_price
+        return context
+
 
 class AddToFavorites(RedirectView):
     model = WishList

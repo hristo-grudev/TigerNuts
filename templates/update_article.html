@@ -22,12 +22,13 @@
 <div class="row">
 
 <div class="col-lg-8 ftco-animate">
-    <form action="{% url 'create article' %}" method="POST" class="p-5 bg-light" enctype="multipart/form-data">
+    <form method="POST" class="p-5 bg-light" enctype="multipart/form-data">
 
         {% csrf_token %}
         {{ form.as_table }}
         <br>
-        <button class="btn btn-primary py-3 px-5">Публикувай</button>
+        <button class="btn btn-primary py-3 px-5">Обнови</button>
+
     </form>
 </div>
 
