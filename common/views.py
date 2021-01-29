@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import F
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, FormView
@@ -173,7 +174,9 @@ class AddToCart(RedirectView):
         return context
 
     def get_redirect_url(self, *args, **kwargs):
-        return reverse_lazy('view cart')
+        _id = self.kwargs['slug']
+        item = Item.objects.filter(id__exact=_id).first()
+        return reverse_lazy('view item', kwargs={'slug': str(item.slug)})
 
 
 class BuyItNow(RedirectView):

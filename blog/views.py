@@ -96,11 +96,18 @@ class UpdateArticle(LoginRequiredMixin, UpdateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(UpdateArticle, self).get_context_data()
+		print(context['object'].author)
 		object_list = Article.objects.order_by('-date')[:3]
 		context['object_list'] = object_list
 		user = get_user(self.request)
 		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
 		context['cart_items'] = cart_items
+		if user:
+			user_group = user.groups.filter(name='Admin').exists()
+		else:
+			user_group = False
+
+		context['user_group'] = user_group
 
 		return context
 
@@ -117,6 +124,12 @@ class DeleteArticle(LoginRequiredMixin, DeleteView):
 		user = get_user(self.request)
 		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
 		context['cart_items'] = cart_items
+		if user:
+			user_group = user.groups.filter(name='Admin').exists()
+		else:
+			user_group = False
+
+		context['user_group'] = user_group
 		return context
 
 
@@ -180,6 +193,12 @@ class DeleteComment(LoginRequiredMixin, DeleteView):
 		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
 		context['cart_items'] = cart_items
 		context['slug'] = self.kwargs['slug']
+		if user:
+			user_group = user.groups.filter(name='Admin').exists()
+		else:
+			user_group = False
+
+		context['user_group'] = user_group
 		return context
 
 
@@ -200,4 +219,10 @@ class EditComment(LoginRequiredMixin, UpdateView):
 		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
 		context['cart_items'] = cart_items
 		context['slug'] = self.kwargs['slug']
+		if user:
+			user_group = user.groups.filter(name='Admin').exists()
+		else:
+			user_group = False
+
+		context['user_group'] = user_group
 		return context

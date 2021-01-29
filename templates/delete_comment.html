@@ -22,12 +22,16 @@
 <div class="row">
 
 <div class="col-lg-8 ftco-animate">
+    {% if user == object.author or user_group %}
     <form method="POST" class="p-5 bg-light" enctype="multipart/form-data">
         <p><strong>Сигурен ли си?</strong></p>
         {% csrf_token %}
         <button class="btn btn-primary py-3 px-5">Изтрий</button>
         <a href="{% url 'view article' slug %}"  class="btn btn-primary py-3 px-5">Откажи</a>
     </form>
+    {% else %}
+    <h1>{{user}} нямаш работа тук!</h1>
+    {% endif %}
 </div>
 
 

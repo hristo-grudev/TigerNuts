@@ -20,8 +20,8 @@
 <section class="ftco-section ftco-degree-bg">
 <div class="container">
 <div class="row">
-
 <div class="col-lg-8 ftco-animate">
+    {% if user == object.author or user_group %}
     <form method="POST" class="p-5 bg-light" enctype="multipart/form-data">
 
         {% csrf_token %}
@@ -30,8 +30,10 @@
         <button class="btn btn-primary py-3 px-5">Обнови</button>
 
     </form>
+    {% else %}
+    <h1>{{user}} нямаш работа тук!</h1>
+    {% endif %}
 </div>
-
 
 {% include 'blog-right.html' %}
 </div>
