@@ -64,7 +64,19 @@ class ItemDetailsView(DetailView):
         item_id = item.id
         images = ItemImages.objects.filter(title__exact=item_id).values('image')
         context['image'] = images[0]['image']
-        cart_items = OrderItem.objects.filter(user=self.request.user).filter(ordered=False).count()
+        device = self.request.COOKIES['device']
+
+        devices = User.objects.filter(username__exact=device).exists()
+
+        if self.request.user.is_authenticated:
+            user = self.request.user
+        else:
+            if not devices:
+                user, created = User.objects.get_or_create(username=device)
+            else:
+                user = User.objects.filter(username__exact=device).first()
+
+        cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
         context['cart_items'] = cart_items
         return context
 
