@@ -2,10 +2,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import F
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
-from django.views.generic import ListView, DetailView, DeleteView, CreateView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import ListView, DetailView, DeleteView, CreateView, FormView
 from django.views.generic.base import RedirectView
 
+from .forms import ItemForm
 from .models import Item, ItemImages, OrderItem, WishList
 
 
@@ -57,13 +58,16 @@ class HomePage(ListView):
 class ItemDetailsView(DetailView):
     model = Item
     template_name = 'products.html'
+    query_pk_and_slug = True
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        print(self.request.POST)
         item = context['item']
         item_id = item.id
         images = ItemImages.objects.filter(title__exact=item_id).values('image')
         context['image'] = images[0]['image']
+        context['form'] = ItemForm  # marker
         device = self.request.COOKIES['device']
 
         devices = User.objects.filter(username__exact=device).exists()
@@ -137,6 +141,7 @@ class AddToCart(RedirectView):
 
     def post(self, request, *args, **kwargs):
         item_id = kwargs['slug']
+
         device = self.request.COOKIES['device']
 
         devices = User.objects.filter(username__exact=device).exists()
@@ -152,10 +157,13 @@ class AddToCart(RedirectView):
         item = Item.objects.filter(id__exact=item_id)
         print(item, user)
         cart_items = OrderItem.objects.filter(ordered=False).filter(user=user).filter(item=item[0])
+        quantity = request.POST.get('quantity')
+        if quantity is None:
+            quantity = 1
         if cart_items:
-            cart_items.update(quantity=F('quantity') + 1)
+            cart_items.update(quantity=F('quantity') + quantity)
         else:
-            OrderItem(user=user, ordered=False, item=item[0], quantity=1).save()
+            OrderItem(user=user, ordered=False, item=item[0], quantity=quantity).save()
         return super(AddToCart, self).post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -163,6 +171,9 @@ class AddToCart(RedirectView):
         cart_items = get_cart_items(self.request, True)
         context['cart_items'] = cart_items
         return context
+
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse_lazy('view cart')
 
 
 class BuyItNow(RedirectView):
@@ -253,10 +264,12 @@ class CartView(ListView):
         grand_total_price = 0
         for item in cart_details:
             pk = item.item.id
+            slug = item.item.slug
             image = ItemImages.objects.filter(title=pk).first()
             grand_total_price += item.get_total_item_price()
             data.append({'title': item.item.title,
                          'id': item.id,
+                         'slug': slug,
                          'discount_price': item.item.discount_price,
                          'price': item.item.price,
                          'quantity': item.quantity,
