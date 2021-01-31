@@ -17,19 +17,20 @@
 <div class="container">
 <div class="row justify-content-center">
 <div class="col-xl-7 ftco-animate">
-<form action="#" class="billing-form">
+<form id="myform" class="billing-form" action="{% url 'make order' %}" method="post">
+    {% csrf_token %}
 <h3 class="mb-4 billing-heading">Адрес за доставка</h3>
 <div class="row align-items-end">
 <div class="col-md-6">
 <div class="form-group">
 <label for="firstname">Име</label>
-<input type="text" class="form-control" placeholder="">
+    {{ form.first_name }}
 </div>
 </div>
 <div class="col-md-6">
 <div class="form-group">
 <label for="lastname">Фамилия</label>
-<input type="text" class="form-control" placeholder="">
+    {{ form.last_name }}
 </div>
 </div>
 <div class="w-100"></div>
@@ -38,9 +39,7 @@
 <label for="country">Държава</label>
 <div class="select-wrap">
 <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-<select name="" id="" class="form-control">
-<option value="">България</option>
-</select>
+{{ form.country }}
 </div>
 </div>
 </div>
@@ -48,46 +47,46 @@
 <div class="col-md-6">
 <div class="form-group">
 <label for="streetaddress">Адрес</label>
-<input type="text" class="form-control" placeholder="Улица и номер">
+    {{ form.street_address }}
 </div>
 </div>
 <div class="col-md-6">
 <div class="form-group">
-<input type="text" class="form-control" placeholder="Appartment, suite, unit etc: (optional)">
+    {{ form.apartment_address }}
 </div>
 </div>
 <div class="w-100"></div>
 <div class="col-md-6">
 <div class="form-group">
 <label for="towncity">Населено място</label>
-<input type="text" class="form-control" placeholder="">
+{{ form.town }}
 </div>
 </div>
 <div class="col-md-6">
 <div class="form-group">
 <label for="postcodezip">Пощенски код</label>
-<input type="text" class="form-control" placeholder="">
+{{ form.zip }}
 </div>
 </div>
 <div class="w-100"></div>
 <div class="col-md-6">
 <div class="form-group">
 <label for="phone">Телефон</label>
-<input type="text" class="form-control" placeholder="">
+{{ form.phone }}
 </div>
 </div>
 <div class="col-md-6">
 <div class="form-group">
 <label for="emailaddress">Е-мейл адрес</label>
-<input type="text" class="form-control" placeholder="">
+{{ form.email }}
 </div>
 </div>
 <div class="w-100"></div>
 <div class="col-md-12">
 <div class="form-group mt-4">
 <div class="radio">
-<label class="mr-3"><input type="radio" name="optradio"> Create an Account? </label>
-<label><input type="radio" name="optradio"> Ship to different address</label>
+<label>{{ form.default }} Направи основен адрес за доставка.</label>
+
 </div>
 </div>
 </div>
@@ -149,7 +148,10 @@
 </div>
 </div>
 </div>
-<p><a href="#" class="btn btn-primary py-3 px-4">Изпрати поръчка</a></p>
+<p><button class="btn btn-primary py-3 px-4" type="submit" form="myform">
+    Изпрати поръчка
+    </button>
+</p>
 </div>
 </div>
 </div>

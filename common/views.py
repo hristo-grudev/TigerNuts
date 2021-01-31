@@ -7,8 +7,8 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, DeleteView, CreateView, FormView
 from django.views.generic.base import RedirectView
 
-from .forms import ItemForm
-from .models import Item, ItemImages, OrderItem, WishList
+from .forms import ItemForm, CheckoutForm
+from .models import Item, ItemImages, OrderItem, WishList, Order, Address
 
 
 def get_cart_items(request, create):
@@ -185,6 +185,7 @@ class BuyItNow(RedirectView):
 
     def post(self, request, *args, **kwargs):
         item_id = kwargs['slug']
+
         device = self.request.COOKIES['device']
 
         devices = User.objects.filter(username__exact=device).exists()
@@ -200,10 +201,13 @@ class BuyItNow(RedirectView):
         item = Item.objects.filter(id__exact=item_id)
         print(item, user)
         cart_items = OrderItem.objects.filter(ordered=False).filter(user=user).filter(item=item[0])
+        quantity = request.POST.get('quantity')
+        if quantity is None:
+            quantity = 1
         if cart_items:
-            cart_items.update(quantity=F('quantity') + 1)
+            cart_items.update(quantity=F('quantity') + quantity)
         else:
-            OrderItem(user=user, ordered=False, item=item[0], quantity=1).save()
+            OrderItem(user=user, ordered=False, item=item[0], quantity=quantity).save()
         return super(BuyItNow, self).post(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -297,12 +301,18 @@ class RemoveItemFromCart(DeleteView):
         return reverse('view cart')
 
 
-class CheckOutView(ListView):
-    model = OrderItem
+class CheckOutView(CreateView):
+    model = Address
     template_name = 'checkout.html'
+    # fields = '__all__'
+    form_class = CheckoutForm
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    def get_success_url(self):
+        slug = self.kwargs['slug']
+        return reverse_lazy('make order', kwargs={'slug': str(slug)})
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
         cart_items = get_cart_items(self.request, False)
         if self.request.user.is_authenticated:
             user = self.request.user
@@ -360,3 +370,16 @@ class AddToFavorites(RedirectView):
             WishList(user=user, item=item[0]).save()
 
         return super(AddToFavorites, self).post(request, *args, **kwargs)
+
+
+class MakeOrder(ListView):
+    model = WishList
+    template_name = 'order_complete.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+    def post(self, *args, **kwargs):
+        pass

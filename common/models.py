@@ -13,7 +13,7 @@ ADDRESS_CHOICES = (
 )
 
 COUNTRY_CHOICES = (
-    ('BG', 'Bulgaria'),
+    ('BG', 'България'),
 )
 
 
@@ -62,7 +62,7 @@ class OrderItem(models.Model):
         return total
 
     def get_absolute_url(self):
-        return reverse('view article', kwargs={'slug': self.slug})
+        return reverse('view item', kwargs={'slug': self.slug})
 
 
 class Order(models.Model):
@@ -111,7 +111,7 @@ class Address(models.Model):
     last_name = models.CharField(max_length=100, default='')
     town = models.CharField(max_length=100, default='')
     street_address = models.CharField(max_length=100, default='')
-    apartment_address = models.CharField(max_length=100, default='')
+    apartment_address = models.CharField(max_length=100, default='', null=True, blank=True)
     country = models.CharField(choices=COUNTRY_CHOICES, max_length=100, default='')
     zip = models.CharField(max_length=100, default='')
     phone = PhoneField(default='')
@@ -119,7 +119,7 @@ class Address(models.Model):
     default = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
     class Meta:
         verbose_name_plural = 'Addresses'
@@ -132,7 +132,7 @@ class Payment(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user
+        return str(self.user)
 
 
 class Coupon(models.Model):
