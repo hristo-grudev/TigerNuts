@@ -301,7 +301,7 @@ class RemoveItemFromCart(DeleteView):
         return reverse('view cart')
 
 
-class CheckOutView(CreateView):
+class CheckOutView(FormView):
     model = Address
     template_name = 'checkout.html'
     # fields = '__all__'
@@ -372,14 +372,20 @@ class AddToFavorites(RedirectView):
         return super(AddToFavorites, self).post(request, *args, **kwargs)
 
 
-class MakeOrder(ListView):
-    model = WishList
+class MakeOrder(CreateView):
+    model = Address
     template_name = 'order_complete.html'
+    form_class = CheckoutForm
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+
+        return super().form_valid(form)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
         return context
 
-    def post(self, *args, **kwargs):
-        pass
+    def get_success_url(self):
+        return reverse_lazy('view home')
