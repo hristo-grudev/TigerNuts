@@ -7,6 +7,18 @@ from django.views.generic import CreateView
 
 from .forms import RegisterForm, LoginForm, ProfileForm
 
+def get_user(request):
+    try:
+        device = request.COOKIES['device']
+    except:
+        device = ''
+    if request.user.is_authenticated:
+        user = request.user
+    else:
+        user = User.objects.filter(username__exact=device).first()
+
+    return user
+
 
 class UserRegisterView(CreateView):
     form_class = RegisterForm
@@ -25,9 +37,11 @@ def register(request):
 @transaction.atomic  # изпълнява всички или нито една
 def register_user(request):
     if request.method == 'GET':
+        user = get_user(request)
         context = {
             'user_form': RegisterForm(),
             'profile_form': ProfileForm(),
+            'user': user,
         }
         return render(request, 'register.html', context)
     else:
@@ -47,10 +61,11 @@ def register_user(request):
 
             login(request, user)  # login user
             return redirect('view home')
-
+        user = get_user(request)
         context = {
             'user_form': RegisterForm(),
             'profile_form': ProfileForm(),
+            'user': user,
         }
         return render(request, 'register.html', context)
 
@@ -58,8 +73,10 @@ def register_user(request):
 def login_user(request):
     if request.method == 'GET':
         login_form = LoginForm()
+        user = get_user(request)
         context = {
-            'login_form': login_form
+            'login_form': login_form,
+            'user': user
         }
         return render(request, 'login.html', context)
     else:
@@ -71,8 +88,10 @@ def login_user(request):
             if user:
                 login(request, user)
                 return redirect('view home')
+        user = get_user(request)
         context = {
-            'login_form': login_form
+            'login_form': login_form,
+            'user': user
         }
         return render(request, 'login.html', context)
 

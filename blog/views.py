@@ -12,15 +12,16 @@ from common.models import OrderItem
 
 
 def get_user(request):
-	if request.user.is_authenticated:
-		user = request.user
-	else:
-		try:
-			device = request.COOKIES['device']
-		except:
-			device = ''
-		user = User.objects.filter(username__exact=device).first()
-	return user
+    try:
+        device = request.COOKIES['device']
+    except:
+        device = ''
+    if request.user.is_authenticated:
+        user = request.user
+    else:
+        user = User.objects.filter(username__exact=device).first()
+
+    return user
 
 
 class ArticleView(ListView):
@@ -32,8 +33,7 @@ class ArticleView(ListView):
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
 		user = get_user(self.request)
-		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
-		context['cart_items'] = cart_items
+		context['user'] = user
 		return context
 
 
@@ -59,7 +59,7 @@ class SingleArticleView(DetailView):
 
 		context['user_group'] = user_group
 		context['comments_count'] = comments_count
-		context['cart_items'] = cart_items
+		context['user'] = user
 		context['object_list'] = object_list
 		context['comments'] = comments
 		context['form'] = form
@@ -83,8 +83,7 @@ class NewArticle(LoginRequiredMixin, FormView):
 		object_list = Article.objects.order_by('-date')[:3]
 		context['object_list'] = object_list
 		user = get_user(self.request)
-		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
-		context['cart_items'] = cart_items
+		context['user'] = user
 
 		return context
 
@@ -96,12 +95,10 @@ class UpdateArticle(LoginRequiredMixin, UpdateView):
 
 	def get_context_data(self, **kwargs):
 		context = super(UpdateArticle, self).get_context_data()
-		print(context['object'].author)
 		object_list = Article.objects.order_by('-date')[:3]
 		context['object_list'] = object_list
 		user = get_user(self.request)
-		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
-		context['cart_items'] = cart_items
+		context['user'] = user
 		if user:
 			user_group = user.groups.filter(name='Admin').exists()
 		else:
@@ -122,8 +119,7 @@ class DeleteArticle(LoginRequiredMixin, DeleteView):
 		object_list = Article.objects.order_by('-date')[:3]
 		context['object_list'] = object_list
 		user = get_user(self.request)
-		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
-		context['cart_items'] = cart_items
+		context['user'] = user
 		if user:
 			user_group = user.groups.filter(name='Admin').exists()
 		else:
@@ -146,8 +142,7 @@ class CreateArticle(LoginRequiredMixin, CreateView):
 		object_list = Article.objects.order_by('-date')[:3]
 		context['object_list'] = object_list
 		user = get_user(self.request)
-		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
-		context['cart_items'] = cart_items
+		context['user'] = user
 		return context
 
 
@@ -171,8 +166,7 @@ class LeaveComment(LoginRequiredMixin, CreateView):
 		object_list = Article.objects.order_by('-date')[:3]
 		context['object_list'] = object_list
 		user = get_user(self.request)
-		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
-		context['cart_items'] = cart_items
+		context['user'] = user
 		return context
 
 
@@ -190,8 +184,7 @@ class DeleteComment(LoginRequiredMixin, DeleteView):
 		object_list = Article.objects.order_by('-date')[:3]
 		context['object_list'] = object_list
 		user = get_user(self.request)
-		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
-		context['cart_items'] = cart_items
+		context['user'] = user
 		context['slug'] = self.kwargs['slug']
 		if user:
 			user_group = user.groups.filter(name='Admin').exists()
@@ -216,8 +209,7 @@ class EditComment(LoginRequiredMixin, UpdateView):
 		object_list = Article.objects.order_by('-date')[:3]
 		context['object_list'] = object_list
 		user = get_user(self.request)
-		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
-		context['cart_items'] = cart_items
+		context['user'] = user
 		context['slug'] = self.kwargs['slug']
 		if user:
 			user_group = user.groups.filter(name='Admin').exists()

@@ -140,70 +140,37 @@ class AboutView(ListView):
 class AddToCart(View):
 
     def get(self, request, *args, **kwargs):
+        user = get_user(request, True)
         item = get_object_or_404(Item, slug=kwargs['slug'])
-        quantity = request.POST.get('quantity')
+
+        quantity = request.GET.get('quantity')
         if not quantity:
             quantity = 1
-        user = get_user(request, True)
+
         print(user, quantity)
         order_item, created = OrderItem.objects.get_or_create(
             item=item,
             user=user,
-            ordered=False,
-            quantity=quantity
+            ordered=False
         )
+        if created:
+            order_item.quantity = int(quantity)
+        order_item.save()
         order_qs = Order.objects.filter(user=user, ordered=False)
         if order_qs.exists():
             order = order_qs[0]
             if order.items.filter(item__slug=item.slug).exists():
-                order_item.quantity += quantity
+                order_item.quantity += int(quantity)
                 order_item.save()
                 return redirect("view cart")
             else:
                 order.items.add(order_item)
-                messages.info(request, "This item was added to your cart.")
                 return redirect("view cart")
         else:
             ordered_date = timezone.now()
             order = Order.objects.create(
                 user=user, ordered_date=ordered_date)
             order.items.add(order_item)
-            messages.info(request, "This item was added to your cart.")
-            return redirect("view cart")
-
-
-class BuyItNow(View):
-
-    def get(self, request, *args, **kwargs):
-        item = get_object_or_404(Item, slug=kwargs['slug'])
-        quantity = request.POST.get('quantity')
-        if not quantity:
-            quantity = 1
-        user = get_user(request, True)
-        print(user, quantity)
-        order_item, created = OrderItem.objects.get_or_create(
-            item=item,
-            user=user,
-            ordered=False,
-            quantity=quantity
-        )
-        order_qs = Order.objects.filter(user=user, ordered=False)
-        if order_qs.exists():
-            order = order_qs[0]
-            if order.items.filter(item__slug=item.slug).exists():
-                order_item.quantity += quantity
-                order_item.save()
-                return redirect("view cart")
-            else:
-                order.items.add(order_item)
-                messages.info(request, "This item was added to your cart.")
-                return redirect("view cart")
-        else:
-            ordered_date = timezone.now()
-            order = Order.objects.create(
-                user=user, ordered_date=ordered_date)
-            order.items.add(order_item)
-            messages.info(request, "This item was added to your cart.")
             return redirect("view cart")
 
 

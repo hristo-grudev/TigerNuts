@@ -44,7 +44,7 @@
                 </p>
 
                 <div class="w-100"></div>
-                <form method="post" action="{% url 'buy-it-now' object.id %}">
+                <form method="get" action="{% url 'add-to-cart' object.slug %}">
                 {% csrf_token %}
 
                 <div class="input-group col-md-6 d-flex mb-3">
