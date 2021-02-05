@@ -1,3 +1,4 @@
+{% load cart_template_tags %}
 <div class="py-1 bg-primary">
 <div class="container">
 <div class="row no-gutters d-flex align-items-start align-items-center px-md-0">
@@ -34,12 +35,7 @@
 <li class="nav-item"><a href="{% url 'view wishlist' %}" class="nav-link">Любими</a></li>
 <li class="nav-item"><a href="{% url 'view about' %}" class="nav-link">За нас</a></li>
 <li class="nav-item"><a href="{% url 'view blog' %}" class="nav-link">Блог</a></li>
-<li class="nav-item"><a class="nav-link" href="{% url 'view contacts' %}">Контакти</a></li>
-{% if cart_items %}
-    <li class="nav-item cta cta-colored"><a href="{% url 'view cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[{{cart_items}}]</a></li>
-{% else %}
-    <li class="nav-item cta cta-colored"><a href="{% url 'view cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
-{% endif %}
+<li class="nav-item"><a class="nav-link" href="{% url 'view contacts' %}">Контакти</a></li><li class="nav-item cta cta-colored"><a href="{% url 'view cart' %}" class="nav-link"><span class="icon-shopping_cart"></span>[{{ user|cart_item_count }}]</a></li>
 {% if user.is_authenticated %}
 <li class="nav-item dropdown">
 <a class="nav-link dropdown-toggle" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Профил</a>

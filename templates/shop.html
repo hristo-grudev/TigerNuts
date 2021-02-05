@@ -33,31 +33,16 @@
 </div>
 <div class="bottom-area d-flex px-3">
 <div class="m-auto d-flex">
-<form action="{% url 'add-to-cart' item.id %}" method="post">
-{% csrf_token %}
-<button style="background:transparent; border:none; color:transparent;" type="submit">
-<a class="d-flex justify-content-center align-items-center text-center">
+<a href="{{ item.item.get_add_to_cart_url }}" class="d-flex justify-content-center align-items-center text-center">
 <span><i class="ion-ios-menu"></i></span>
-</a>
-</button>
-</form>
-<form action="{% url 'buy-it-now' item.id %}" method="post">
-{% csrf_token %}
-<button style="background:transparent; border:none; color:transparent;" type="submit">
-<a class="buy-now d-flex justify-content-center align-items-center mx-1">
+
+<a href="{{ item.item.get_add_to_cart_url }}" class="buy-now d-flex justify-content-center align-items-center mx-1">
     <span><i class="ion-ios-cart"></i></span>
 </a>
-</button>
-</form>
 
-<form action="{% url 'add-to-favorites' item.id %}" method="post">
-    {% csrf_token %}
-    <button style="background:transparent; border:none; color:transparent;" type="submit">
-        <a class="heart d-flex justify-content-center align-items-center ">
-            <span><i class="ion-ios-heart"></i></span>
-        </a>
-    </button>
-</form>
+<a href="{{ item.item.add_to_favorites_url }}" class="heart d-flex justify-content-center align-items-center ">
+    <span><i class="ion-ios-heart"></i></span>
+</a>
 </div>
 </div>
 </div>

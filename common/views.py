@@ -1,38 +1,47 @@
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import F
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, DetailView, DeleteView, CreateView, FormView
-from django.views.generic.base import RedirectView
+from django.utils import timezone
+from django.views.generic import ListView, DetailView, DeleteView, CreateView, FormView, UpdateView
+from django.views.generic.base import RedirectView, View
 
-from .forms import ItemForm, CheckoutForm
-from .models import Item, ItemImages, OrderItem, WishList, Order, Address
+from .forms import ItemForm, CheckoutForm, CouponForm
+from .models import Item, ItemImages, OrderItem, WishList, Order, Address, Coupon
 
 
-def get_cart_items(request, create):
+def is_valid_form(values):
+    valid = True
+    for field in values:
+        if field == '':
+            valid = False
+    return valid
+
+
+def get_user(request, create):
     try:
         device = request.COOKIES['device']
     except:
         device = ''
     devices = User.objects.filter(username__exact=device).exists()
     if request.user.is_authenticated:
-        user = request.user.id
+        user = request.user
     else:
         if not devices and create is True:
             user, created = User.objects.get_or_create(username=device)
         else:
             user = User.objects.filter(username__exact=device).first()
 
-    cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
-    return cart_items
+    return user
 
 
 class HomePage(ListView):
     model = Item
     template_name = 'home.html'
-    context_object_name = 'itmes'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -43,6 +52,7 @@ class HomePage(ListView):
             image = ItemImages.objects.filter(title=pk).first()
             data.append({'id': item.id,
                          'title': item.title,
+                         'item': item,
                          'discount_price': item.discount_price,
                          'price': item.price,
                          'percent': round((1 - item.discount_price / item.price) * 100),
@@ -50,8 +60,9 @@ class HomePage(ListView):
                          'description': item.description,
                          'image': image.image})
         context['data'] = data
-        cart_items = get_cart_items(self.request, False)
-        context['cart_items'] = cart_items
+        print(data)
+        user = get_user(self.request, False)
+        context['user'] = user
 
         return context
 
@@ -69,20 +80,9 @@ class ItemDetailsView(DetailView):
         images = ItemImages.objects.filter(title__exact=item_id).values('image')
         context['image'] = images[0]['image']
         context['form'] = ItemForm  # marker
-        device = self.request.COOKIES['device']
 
-        devices = User.objects.filter(username__exact=device).exists()
-
-        if self.request.user.is_authenticated:
-            user = self.request.user
-        else:
-            if not devices:
-                user, created = User.objects.get_or_create(username=device)
-            else:
-                user = User.objects.filter(username__exact=device).first()
-
-        cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
-        context['cart_items'] = cart_items
+        user = get_user(self.request, False)
+        context['user'] = user
         return context
 
 
@@ -92,8 +92,8 @@ class ContactsView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = get_cart_items(self.request, False)
-        context['cart_items'] = cart_items
+        user = get_user(self.request, False)
+        context['user'] = user
         return context
 
 
@@ -112,6 +112,7 @@ class ShopView(ListView):
             image = ItemImages.objects.filter(title=pk).first()
             data.append({'id': item.id,
                          'title': item.title,
+                         'item': item,
                          'discount_price': item.discount_price,
                          'price': item.price,
                          'percent': round((1 - item.discount_price / item.price) * 100),
@@ -119,8 +120,8 @@ class ShopView(ListView):
                          'description': item.description,
                          'image': image.image})
         context['data'] = data
-        cart_items = get_cart_items(self.request, False)
-        context['cart_items'] = cart_items
+        user = get_user(self.request, False)
+        context['user'] = user
 
         return context
 
@@ -131,90 +132,79 @@ class AboutView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = get_cart_items(self.request, False)
-        context['cart_items'] = cart_items
+        user = get_user(self.request, False)
+        context['user'] = user
         return context
 
 
-class AddToCart(RedirectView):
-    http_method_names = ['post']
-    url = '/shop/'
+class AddToCart(View):
 
-    def post(self, request, *args, **kwargs):
-        item_id = kwargs['slug']
-
-        device = self.request.COOKIES['device']
-
-        devices = User.objects.filter(username__exact=device).exists()
-
-        if self.request.user.is_authenticated:
-            user = self.request.user
-        else:
-            if not devices:
-                user, created = User.objects.get_or_create(username=device)
-            else:
-                user = User.objects.filter(username__exact=device).first()
-
-        item = Item.objects.filter(id__exact=item_id)
-        print(item, user)
-        cart_items = OrderItem.objects.filter(ordered=False).filter(user=user).filter(item=item[0])
+    def get(self, request, *args, **kwargs):
+        item = get_object_or_404(Item, slug=kwargs['slug'])
         quantity = request.POST.get('quantity')
-        if quantity is None:
+        if not quantity:
             quantity = 1
-        if cart_items:
-            cart_items.update(quantity=F('quantity') + quantity)
-        else:
-            OrderItem(user=user, ordered=False, item=item[0], quantity=quantity).save()
-        return super(AddToCart, self).post(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        cart_items = get_cart_items(self.request, True)
-        context['cart_items'] = cart_items
-        return context
-
-    def get_redirect_url(self, *args, **kwargs):
-        _id = self.kwargs['slug']
-        item = Item.objects.filter(id__exact=_id).first()
-        return reverse_lazy('view item', kwargs={'slug': str(item.slug)})
-
-
-class BuyItNow(RedirectView):
-    http_method_names = ['post']
-    url = '/cart/'
-
-    def post(self, request, *args, **kwargs):
-        item_id = kwargs['slug']
-
-        device = self.request.COOKIES['device']
-
-        devices = User.objects.filter(username__exact=device).exists()
-
-        if self.request.user.is_authenticated:
-            user = self.request.user
-        else:
-            if not devices:
-                user, created = User.objects.get_or_create(username=device)
+        user = get_user(request, True)
+        print(user, quantity)
+        order_item, created = OrderItem.objects.get_or_create(
+            item=item,
+            user=user,
+            ordered=False,
+            quantity=quantity
+        )
+        order_qs = Order.objects.filter(user=user, ordered=False)
+        if order_qs.exists():
+            order = order_qs[0]
+            if order.items.filter(item__slug=item.slug).exists():
+                order_item.quantity += quantity
+                order_item.save()
+                return redirect("view cart")
             else:
-                user = User.objects.filter(username__exact=device).first()
-
-        item = Item.objects.filter(id__exact=item_id)
-        print(item, user)
-        cart_items = OrderItem.objects.filter(ordered=False).filter(user=user).filter(item=item[0])
-        quantity = request.POST.get('quantity')
-        if quantity is None:
-            quantity = 1
-        if cart_items:
-            cart_items.update(quantity=F('quantity') + quantity)
+                order.items.add(order_item)
+                messages.info(request, "This item was added to your cart.")
+                return redirect("view cart")
         else:
-            OrderItem(user=user, ordered=False, item=item[0], quantity=quantity).save()
-        return super(BuyItNow, self).post(request, *args, **kwargs)
+            ordered_date = timezone.now()
+            order = Order.objects.create(
+                user=user, ordered_date=ordered_date)
+            order.items.add(order_item)
+            messages.info(request, "This item was added to your cart.")
+            return redirect("view cart")
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        cart_items = get_cart_items(self.request, True)
-        context['cart_items'] = cart_items
-        return context
+
+class BuyItNow(View):
+
+    def get(self, request, *args, **kwargs):
+        item = get_object_or_404(Item, slug=kwargs['slug'])
+        quantity = request.POST.get('quantity')
+        if not quantity:
+            quantity = 1
+        user = get_user(request, True)
+        print(user, quantity)
+        order_item, created = OrderItem.objects.get_or_create(
+            item=item,
+            user=user,
+            ordered=False,
+            quantity=quantity
+        )
+        order_qs = Order.objects.filter(user=user, ordered=False)
+        if order_qs.exists():
+            order = order_qs[0]
+            if order.items.filter(item__slug=item.slug).exists():
+                order_item.quantity += quantity
+                order_item.save()
+                return redirect("view cart")
+            else:
+                order.items.add(order_item)
+                messages.info(request, "This item was added to your cart.")
+                return redirect("view cart")
+        else:
+            ordered_date = timezone.now()
+            order = Order.objects.create(
+                user=user, ordered_date=ordered_date)
+            order.items.add(order_item)
+            messages.info(request, "This item was added to your cart.")
+            return redirect("view cart")
 
 
 class WishListView(ListView):
@@ -223,14 +213,8 @@ class WishListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        try:
-            device = self.request.COOKIES['device']
-        except:
-            device = ''
-        if self.request.user.is_authenticated:
-            user = self.request.user.id
-        else:
-            user = User.objects.filter(username__exact=device).first()
+        user = get_user(self.request, False)
+        context['user'] = user
         wish_list = WishList.objects.filter(user=user)
         context['wish_list'] = wish_list
         data = []
@@ -240,6 +224,7 @@ class WishListView(ListView):
             item_details = Item.objects.filter(title=pk)
             data.append({'id': item_details[0].id,
                          'title': item_details[0].title,
+                         'item': item.item,
                          'discount_price': item_details[0].discount_price,
                          'price': item_details[0].price,
                          'percent': round((1 - item_details[0].discount_price / item_details[0].price) * 100),
@@ -247,8 +232,6 @@ class WishListView(ListView):
                          'description': item_details[0].description,
                          'image': image.image})
 
-        cart_items = get_cart_items(self.request, False)
-        context['cart_items'] = cart_items
         context['data'] = data
         return context
 
@@ -259,14 +242,9 @@ class CartView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        cart_items = get_cart_items(self.request, False)
-        if self.request.user.is_authenticated:
-            user = self.request.user
-        else:
-            device = self.request.COOKIES['device']
-            user = User.objects.filter(username__exact=device).first()
-        cart_details = OrderItem.objects.filter(user=user).filter(ordered=False)
-        context['cart_items'] = cart_items
+        user = get_user(self.request, False)
+        context['user'] = user
+        cart_details = OrderItem.objects.filter(user=user, ordered=False)
         data = []
         grand_total_price = 0
         for item in cart_details:
@@ -277,6 +255,7 @@ class CartView(ListView):
             data.append({'title': item.item.title,
                          'id': item.id,
                          'slug': slug,
+                         'item': item.item,
                          'discount_price': item.item.discount_price,
                          'price': item.item.price,
                          'quantity': item.quantity,
@@ -291,14 +270,30 @@ class CartView(ListView):
         return context
 
 
-class RemoveItemFromCart(DeleteView):
+class RemoveItemFromCart(View):
 
-    def get_object(self):
-        obj_id = self.kwargs.get('id')
-        return get_object_or_404(OrderItem, id=obj_id)
-
-    def get_success_url(self):
-        return reverse('view cart')
+    def get(self, request, **kwargs):
+        item = get_object_or_404(Item, slug=kwargs['slug'])
+        user = get_user(request, False)
+        order_qs = Order.objects.filter(
+            user=user,
+            ordered=False
+        )
+        if order_qs.exists():
+            order = order_qs[0]
+            if order.items.filter(item__slug=item.slug).exists():
+                order_item = OrderItem.objects.filter(
+                    item=item,
+                    user=user,
+                    ordered=False
+                )[0]
+                order.items.remove(order_item)
+                order_item.delete()
+                return redirect("view cart")
+            else:
+                return redirect("view item", slug=kwargs['slug'])
+        else:
+            return redirect("view item", slug=kwargs['slug'])
 
 
 class CheckOutView(FormView):
@@ -313,14 +308,9 @@ class CheckOutView(FormView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        cart_items = get_cart_items(self.request, False)
-        if self.request.user.is_authenticated:
-            user = self.request.user
-        else:
-            device = self.request.COOKIES['device']
-            user = User.objects.filter(username__exact=device).first()
+        user = get_user(self.request, False)
+        context['user'] = user
         cart_details = OrderItem.objects.filter(user=user).filter(ordered=False)
-        context['cart_items'] = cart_items
         data = []
         grand_total_price = 0
         for item in cart_details:
@@ -343,49 +333,190 @@ class CheckOutView(FormView):
         return context
 
 
-class AddToFavorites(RedirectView):
-    model = WishList
-    # success_url = '/shop/'
-    http_method_names = ['post']
-    url = '/shop/'
+class AddToFavorites(View):
 
-    def post(self, request, *args, **kwargs):
-        item_id = kwargs['id']
-        device = self.request.COOKIES['device']
+    def get(self, request, *args, **kwargs):
+        item_slug = kwargs['slug']
+        user = get_user(request, True)
 
-        devices = User.objects.filter(username__exact=device).exists()
-
-        if self.request.user.is_authenticated:
-            user = self.request.user
-        else:
-            if not devices:
-                user, created = User.objects.get_or_create(username=device)
-            else:
-                user = User.objects.filter(username__exact=device).first()
-
-        item = Item.objects.filter(id__exact=item_id)
+        item = Item.objects.filter(slug__exact=item_slug)
         try:
             WishList.objects.get(user=user, item=item[0]).delete()
         except:
             WishList(user=user, item=item[0]).save()
 
-        return super(AddToFavorites, self).post(request, *args, **kwargs)
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
-class MakeOrder(CreateView):
-    model = Address
-    template_name = 'order_complete.html'
-    form_class = CheckoutForm
+class MakeOrder(View):
+    def get(self, *args, **kwargs):
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            form = CheckoutForm()
+            context = {
+                'form': form,
+                'couponform': CouponForm(),
+                'order': order,
+                'DISPLAY_COUPON_FORM': True
+            }
 
-    def form_valid(self, form):
-        form.instance.user = self.request.user
+            shipping_address_qs = Address.objects.filter(
+                user=self.request.user,
+                address_type='S',
+                default=True
+            )
+            if shipping_address_qs.exists():
+                context.update(
+                    {'default_shipping_address': shipping_address_qs[0]})
 
-        return super().form_valid(form)
+            billing_address_qs = Address.objects.filter(
+                user=self.request.user,
+                address_type='B',
+                default=True
+            )
+            if billing_address_qs.exists():
+                context.update(
+                    {'default_billing_address': billing_address_qs[0]})
+            return render(self.request, "checkout.html", context)
+        except ObjectDoesNotExist:
+            messages.info(self.request, "You do not have an active order")
+            return redirect("core:checkout")
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST or None)
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            if form.is_valid():
+
+                use_default_shipping = form.cleaned_data.get(
+                    'use_default_shipping')
+                if use_default_shipping:
+                    print("Using the defualt shipping address")
+                    address_qs = Address.objects.filter(
+                        user=self.request.user,
+                        default=True
+                    )
+                    if address_qs.exists():
+                        shipping_address = address_qs[0]
+                        order.shipping_address = shipping_address
+                        order.save()
+                    else:
+                        messages.info(
+                            self.request, "No default shipping address available")
+                        return redirect('view checkout')
+                else:
+                    print("User is entering a new shipping address")
+                    shipping_address1 = form.cleaned_data.get(
+                        'street_address')
+                    shipping_address2 = form.cleaned_data.get(
+                        'apartment_address')
+                    shipping_country = form.cleaned_data.get(
+                        'country')
+                    shipping_zip = form.cleaned_data.get('shipping_zip')
+
+                    if is_valid_form([shipping_address1, shipping_country, shipping_zip]):
+                        shipping_address = Address(
+                            user=self.request.user,
+                            street_address=shipping_address1,
+                            apartment_address=shipping_address2,
+                            country=shipping_country,
+                            zip=shipping_zip
+                        )
+                        shipping_address.save()
+
+                        order.shipping_address = shipping_address
+                        order.save()
+
+                        set_default_shipping = form.cleaned_data.get(
+                            'set_default_shipping')
+                        if set_default_shipping:
+                            shipping_address.default = True
+                            shipping_address.save()
+
+                    else:
+                        messages.info(
+                            self.request, "Please fill in the required shipping address fields")
+
+                payment_option = form.cleaned_data.get('payment_option')
+
+                if payment_option == 'C':
+                    return redirect('core:payment', payment_option='card')
+                elif payment_option == 'P':
+                    return redirect('core:payment', payment_option='paypal')
+                else:
+                    messages.warning(
+                        self.request, "Invalid payment option selected")
+                    return redirect('view checkout')
+        except ObjectDoesNotExist:
+            messages.warning(self.request, "You do not have an active order")
+            return redirect("view summary")
+
+
+def get_coupon(request, code):
+    try:
+        coupon = Coupon.objects.get(code=code)
+        return coupon
+    except ObjectDoesNotExist:
+        messages.info(request, "This coupon does not exist")
+        return redirect("view cart")
+
+
+class AddCouponView(View):
+    def post(self, *args, **kwargs):
+        form = CouponForm(self.request.POST or None)
+        if form.is_valid():
+            try:
+                code = form.cleaned_data.get('code')
+                order = Order.objects.get(
+                    user=self.request.user, ordered=False)
+                order.coupon = get_coupon(self.request, code)
+                order.save()
+                messages.success(self.request, "Successfully added coupon")
+                return redirect("view cart")
+            except ObjectDoesNotExist:
+                messages.info(self.request, "You do not have an active order")
+                return redirect("view cart")
+
+
+class OrderSummaryView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'summary.html'
+
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        items = Order.objects.filter(user=self.request.user)
+        print(items)
+        context['items'] = items
 
         return context
 
-    def get_success_url(self):
-        return reverse_lazy('view home')
+
+def remove_single_item_from_cart(request, slug):
+    item = get_object_or_404(Item, slug=slug)
+    user = get_user(request, False)
+    order_qs = Order.objects.filter(
+        user=user,
+        ordered=False
+    )
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.items.filter(item__slug=item.slug).exists():
+            order_item = OrderItem.objects.filter(
+                item=item,
+                user=user,
+                ordered=False
+            )[0]
+            if order_item.quantity > 1:
+                order_item.quantity -= 1
+                order_item.save()
+            else:
+                order.items.remove(order_item)
+            messages.info(request, "This item quantity was updated.")
+            return redirect("view cart")
+        else:
+            messages.info(request, "This item was not in your cart")
+            return redirect("view item", slug=slug)
+    else:
+        messages.info(request, "You do not have an active order")
+        return redirect("view item", slug=slug)

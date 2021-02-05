@@ -1,7 +1,7 @@
 from django.urls import path
 
 from common.views import HomePage, ItemDetailsView, ContactsView, ShopView, AboutView, AddToCart, WishListView, \
-	CartView, RemoveItemFromCart, CheckOutView, BuyItNow, AddToFavorites, MakeOrder
+	CartView, RemoveItemFromCart, CheckOutView, BuyItNow, AddToFavorites, MakeOrder, AddCouponView, OrderSummaryView
 
 urlpatterns = [
 	path('', HomePage.as_view(), name='view home'),
@@ -12,9 +12,13 @@ urlpatterns = [
 	path('wishlist/', WishListView.as_view(), name='view wishlist'),
 	path('cart/', CartView.as_view(), name='view cart'),
 	path('add-to-cart/<slug:slug>/', AddToCart.as_view(), name='add-to-cart'),
-	path('delete-from-cart/<int:id>/', RemoveItemFromCart.as_view(), name='delete-from-cart'),
+	# path('add-to-cart/<slug:slug>/', AddToCart.as_view(), name='add-to-cart'),
+	path('remove-from-cart/<slug:slug>/', RemoveItemFromCart.as_view(), name='remove-from-cart'),
+	# path('remove-from-cart/<slug:slug>/', RemoveItemFromCart.as_view(), name='remove-from-cart'),
 	path('checkout/', CheckOutView.as_view(), name='view checkout'),
 	path('buy-it-now/<slug:slug>/', BuyItNow.as_view(), name='buy-it-now'),
-	path('add-to-favorites/<int:id>/', AddToFavorites.as_view(), name='add-to-favorites'),
+	path('add-to-favorites/<slug:slug>/', AddToFavorites.as_view(), name='add-to-favorites'),
 	path('order/', MakeOrder.as_view(), name='make order'),
+	path('coupon/', AddCouponView.as_view(), name='add coupon'),
+	path('summary/', OrderSummaryView.as_view(), name='view summary'),
 ]

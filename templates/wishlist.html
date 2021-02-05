@@ -32,12 +32,7 @@
 {% for item in data %}
 <tr class="text-center">
 <td class="product-remove">
-    <form id="deleteForm" action="{% url 'add-to-favorites' item.id %}?next={% url 'view wishlist' %}" method="post">
-    {% csrf_token %}
-    <button style="background:transparent; border:none; color:transparent;" type="submit">
-        <a><span class="ion-ios-close"></span></a>
-    </button>
-    </form>
+    <a href="{{item.item.add_to_favorites_url}}?next={% url 'view wishlist' %}"><span class="ion-ios-close"></span></a>
 </td>
 </td>
 <td class="image-prod">
