@@ -1,6 +1,15 @@
 from django import forms
 from .models import Item, OrderItem, Address
 
+PAYMENT_CHOICES = (
+    ('C', 'Наложен платеж (плащане в брой на куриера при доставка)'),
+    ('S', 'С кредитна/дебитна карта онлайн'),
+    ('B', 'Директен банков трансфер')
+)
+
+COUNTRY_CHOICES = (
+    ('BG', 'България'),
+)
 
 class NewsModal(forms.ModelForm):
     class Meta:
@@ -25,10 +34,19 @@ class ItemForm(forms.ModelForm):
         self.fields['quantity'].label = ""
 
 
-class CheckoutForm(forms.ModelForm):
-    class Meta:
-        model = Address
-        exclude = ('user',)
+class CheckoutForm(forms.Form):
+    first_name = forms.CharField(required=False)
+    last_name = forms.CharField(required=False)
+    town = forms.CharField(required=False)
+    street_address = forms.CharField(required=False)
+    apartment_address = forms.CharField(required=False)
+    country = forms.CharField(required=False)
+    zip = forms.CharField(required=False)
+    phone = forms.CharField(required=False)
+    email = forms.CharField(required=False)
+    set_default_shipping = forms.BooleanField(required=False)
+    payment_option = forms.ChoiceField(
+        widget=forms.RadioSelect, choices=PAYMENT_CHOICES)
 
     def __init__(self, *args, **kwargs):
         super(CheckoutForm, self).__init__(*args, **kwargs)
@@ -53,15 +71,19 @@ class CheckoutForm(forms.ModelForm):
         self.fields['phone'].widget.attrs['name'] = 'phone'
         self.fields['email'].widget.attrs['class'] = 'form-control'
         self.fields['email'].widget.attrs['name'] = 'email'
-        self.fields['default'].widget.attrs['class'] = 'mr-2'
-        self.fields['default'].widget.attrs['type'] = 'checkbox'
-        self.fields['default'].widget.attrs['name'] = 'use_default_shipping'
+        self.fields['set_default_shipping'].widget.attrs['class'] = 'mr-2'
+        self.fields['set_default_shipping'].widget.attrs['type'] = 'checkbox'
+        self.fields['set_default_shipping'].widget.attrs['name'] = 'set_default_shipping'
 
 
 class CouponForm(forms.Form):
     code = forms.CharField(widget=forms.TextInput(attrs={
-        'class': 'form-control',
-        'placeholder': 'Promo code',
-        'aria-label': 'Recipient\'s username',
-        'aria-describedby': 'basic-addon2'
+        'class': 'form-control text-left px-3',
+        'placeholder': 'Промо код'
     }))
+
+
+class PaymentForm(forms.Form):
+    stripeToken = forms.CharField(required=False)
+    save = forms.BooleanField(required=False)
+    use_default = forms.BooleanField(required=False)

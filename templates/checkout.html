@@ -17,7 +17,7 @@
 <div class="container">
 <div class="row justify-content-center">
 <div class="col-xl-7 ftco-animate">
-<form id="myform" class="billing-form" action="{% url 'make order' %}" method="post">
+<form id="myform" class="billing-form" method="post">
     {% csrf_token %}
 <h3 class="mb-4 billing-heading">Адрес за доставка</h3>
 <div class="row align-items-end">
@@ -85,13 +85,12 @@
 <div class="col-md-12">
 <div class="form-group mt-4">
 <div class="radio">
-<label>{{ form.default }} Направи основен адрес за доставка.</label>
+<label>{{ form.set_default_shipping }} Направи основен адрес за доставка.</label>
 
 </div>
 </div>
 </div>
 </div>
-</form>
 </div>
 <div class="col-xl-5">
 <div class="row mt-5 pt-3">
@@ -120,27 +119,16 @@
 <div class="col-md-12">
 <div class="cart-detail p-3 p-md-4">
 <h3 class="billing-heading mb-4">Начин на плащане</h3>
-<div class="form-group">
-<div class="col-md-12">
-<div class="radio">
-<label><input type="radio" name="payment_option" class="mr-2"> Директен банков трансфер</label>
-</div>
-</div>
-</div>
-<div class="form-group">
-<div class="col-md-12">
-<div class="radio">
-<label><input type="radio" name="payment_option" class="mr-2"> С кредитна/дебитна карта онлайн</label>
-</div>
-</div>
-</div>
-<div class="form-group">
-<div class="col-md-12">
-<div class="radio">
-<label><input type="radio" name="payment_option" class="mr-2"> Наложен платеж (плащане в брой на куриера при доставка)</label>
-</div>
-</div>
-</div>
+{% for value, name in form.fields.payment_option.choices %}
+    <div class="form-group">
+        <div class="col-md-12">
+            <div class="radio">
+                <label for="{{ name }}" ><input id="{{ name }}" name="payment_option" value="{{ value }}" type="radio" class="mr-2" required> {{ name }}</label>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+    </form>
 <div class="form-group">
 <div class="col-md-12">
 <div class="checkbox">

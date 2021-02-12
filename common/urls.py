@@ -1,7 +1,8 @@
 from django.urls import path
 
 from common.views import HomePage, ItemDetailsView, ContactsView, ShopView, AboutView, AddToCart, WishListView, \
-	CartView, RemoveItemFromCart, CheckOutView, AddToFavorites, MakeOrder, AddCouponView, OrderSummaryView
+	CartView, RemoveItemFromCart, CheckOutView, BuyItNow, AddToFavorites, AddCouponView, PaymentView, FinishOrder, \
+	order_success
 
 urlpatterns = [
 	path('', HomePage.as_view(), name='view home'),
@@ -12,10 +13,15 @@ urlpatterns = [
 	path('wishlist/', WishListView.as_view(), name='view wishlist'),
 	path('cart/', CartView.as_view(), name='view cart'),
 	path('add-to-cart/<slug:slug>/', AddToCart.as_view(), name='add-to-cart'),
+	# path('add-to-cart/<slug:slug>/', AddToCart.as_view(), name='add-to-cart'),
 	path('remove-from-cart/<slug:slug>/', RemoveItemFromCart.as_view(), name='remove-from-cart'),
+	# path('remove-from-cart/<slug:slug>/', RemoveItemFromCart.as_view(), name='remove-from-cart'),
 	path('checkout/', CheckOutView.as_view(), name='view checkout'),
+	path('buy-it-now/<slug:slug>/', BuyItNow.as_view(), name='buy-it-now'),
 	path('add-to-favorites/<slug:slug>/', AddToFavorites.as_view(), name='add-to-favorites'),
-	path('order/', MakeOrder.as_view(), name='make order'),
 	path('coupon/', AddCouponView.as_view(), name='add coupon'),
-	path('summary/', OrderSummaryView.as_view(), name='view summary'),
+	# path('summary/', OrderSummaryView.as_view(), name='view summary'),
+	path('payment/<payment_option>/', PaymentView.as_view(), name='view payment'),
+	path('finish/', FinishOrder.as_view(), name='finish order'),
+	path('order-completed/', order_success, name='completed order'),
 ]

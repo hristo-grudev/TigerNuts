@@ -40,10 +40,50 @@
         <td>{{i.get_total_item_price}} лв.</td>
     </tr>
     {% endfor %}
-
 {% endfor %}
 </tbody>
 </table>
+<table  class="table">
+    <thead class="thead-primary">
+    <th colspan="2">Доставка</th>
+    </thead>
+    <tr class="text-center">
+        <td>Имена и телефон:</td>
+        <td>{{items.0.shipping_address.first_name}} {{items.0.shipping_address.last_name}} - {{items.0.shipping_address.phone}}</td>
+    </tr>
+    <tr class="text-center">
+        <td>Адрес за доставка:</td>
+        <td>{{items.0.shipping_address.country}}, {{items.0.shipping_address.town}}, {{items.0.shipping_address.street_address}} {{items.0.shipping_address.apartment_address}}</td>
+    </tr>
+    <tr class="text-center">
+        <td>e-mail:</td>
+        <td>{{items.0.shipping_address.email}}</td>
+    </tr>
+
+</table>
+<table  class="table">
+    <thead class="thead-primary">
+    <th colspan="2">Крайна цена</th>
+    </thead>
+    <tr class="text-center">
+        <td>Поръчка:</td>
+        <td>{{items.0.get_total|floatformat:2|intcomma}} лв.</td>
+    </tr>
+    <tr class="text-center">
+        <td>Доставка:</td>
+        <td>{{items.0.get_shipping|floatformat:2|intcomma}} лв.</td>
+    </tr>
+    <tr class="text-center">
+        <td>Отстъпка:</td>
+        <td>-{{items.0.coupon.amount|floatformat:2|intcomma}} лв.</td>
+    </tr>
+    <tr class="text-center">
+        <td>Общо:</td>
+        <td>{{items.0.get_final_price|floatformat:2|intcomma}} лв.</td>
+    </tr>
+
+</table>
+    <a href="{% url 'finish order' %}" class="btn btn-black py-3 px-5">Изпрати поръчката</a>
 </div>
 </div>
 </div>
