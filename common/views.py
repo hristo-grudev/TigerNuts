@@ -522,8 +522,7 @@ class FinishOrder(View):
             new_data = Order.objects.filter(ref_code=order.ref_code)
             list_of_items_html = {'shipping': new_data[0], 'items': order_items}
             email_body = render_to_string('email.html', context=list_of_items_html)
-            print(email_body)
-            email = EmailMultiAlternatives(f'Поръчка №:{order.ref_code}', email_body, to=[order.shipping_address.email])
+            email = EmailMultiAlternatives(f'Поръчка №:{order.ref_code}', email_body, to=['tiger.nuts.bulgaria@gmail.com', order.shipping_address.email])
             email.attach_alternative(email_body, "text/html")
             email.send()
             return redirect("completed order")
