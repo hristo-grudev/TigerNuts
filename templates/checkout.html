@@ -4,148 +4,158 @@
 
 {% block body %}
 <div class="hero-wrap hero-bread" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
-<div class="container">
-<div class="row no-gutters slider-text align-items-center justify-content-center">
-<div class="col-md-9 ftco-animate text-center">
-<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span>Плащане</span></p>
-<h1 class="mb-0 bread">Плащане</h1>
-</div>
-</div>
-</div>
-</div>
-<section class="ftco-section">
-<div class="container">
-<div class="row justify-content-center">
-<div class="col-xl-7 ftco-animate">
-<form id="myform" class="billing-form" method="post">
-    {% csrf_token %}
-<h3 class="mb-4 billing-heading">Адрес за доставка</h3>
-<div class="row align-items-end">
-<div class="col-md-6">
-<div class="form-group">
-<label for="firstname">Име</label>
-    {{ form.first_name }}
-</div>
-</div>
-<div class="col-md-6">
-<div class="form-group">
-<label for="lastname">Фамилия</label>
-    {{ form.last_name }}
-</div>
-</div>
-<div class="w-100"></div>
-<div class="col-md-12">
-<div class="form-group">
-<label for="country">Държава</label>
-<div class="select-wrap">
-<div class="icon"><span class="ion-ios-arrow-down"></span></div>
-{{ form.country }}
-</div>
-</div>
-</div>
-<div class="w-100"></div>
-<div class="col-md-6">
-<div class="form-group">
-<label for="streetaddress">Адрес</label>
-    {{ form.street_address }}
-</div>
-</div>
-<div class="col-md-6">
-<div class="form-group">
-    {{ form.apartment_address }}
-</div>
-</div>
-<div class="w-100"></div>
-<div class="col-md-6">
-<div class="form-group">
-<label for="towncity">Населено място</label>
-{{ form.town }}
-</div>
-</div>
-<div class="col-md-6">
-<div class="form-group">
-<label for="postcodezip">Пощенски код</label>
-{{ form.zip }}
-</div>
-</div>
-<div class="w-100"></div>
-<div class="col-md-6">
-<div class="form-group">
-<label for="phone">Телефон</label>
-{{ form.phone }}
-</div>
-</div>
-<div class="col-md-6">
-<div class="form-group">
-<label for="emailaddress">Е-мейл адрес</label>
-{{ form.email }}
-</div>
-</div>
-<div class="w-100"></div>
-<div class="col-md-12">
-<div class="form-group mt-4">
-<div class="radio">
-<label>{{ form.set_default_shipping }} Направи основен адрес за доставка.</label>
-
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="col-xl-5">
-<div class="row mt-5 pt-3">
-<div class="col-md-12 d-flex mb-5">
-<div class="cart-detail cart-total p-3 p-md-4">
-<h3 class="billing-heading mb-4">Количка</h3>
-<p class="d-flex">
-<span>Междинна сума</span>
-<span>{{grand_total_price|floatformat:2|intcomma}} лв.</span>
-</p>
-<p class="d-flex">
-<span>Доставка</span>
-<span>{{delivery|floatformat:2|intcomma}} лв.</span>
-</p>
-<p class="d-flex">
-<span>Отстъпка</span>
-<span>0.00 лв.</span>
-</p>
-<hr>
-<p class="d-flex total-price">
-<span>Общо</span>
-<span>{{grand_total_price|add:delivery|floatformat:2|intcomma}} лв.</span>
-</p>
-</div>
-</div>
-<div class="col-md-12">
-<div class="cart-detail p-3 p-md-4">
-<h3 class="billing-heading mb-4">Начин на плащане</h3>
-{% for value, name in form.fields.payment_option.choices %}
-    <div class="form-group">
-        <div class="col-md-12">
-            <div class="radio">
-                <label for="{{ name }}" ><input id="{{ name }}" name="payment_option" value="{{ value }}" type="radio" class="mr-2" required> {{ name }}</label>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span>Плащане</span>
+                </p>
+                <h1 class="mb-0 bread">Плащане</h1>
             </div>
         </div>
     </div>
-{% endfor %}
-    </form>
-<div class="form-group">
-<div class="col-md-12">
-<div class="checkbox">
-<label><input type="checkbox" value="" class="mr-2"> Прочетох и разбрах политиката за поверителност с подробна и допълнителна информация и съм съгласен/а с нея.</label>
 </div>
-</div>
-</div>
-<p><button class="btn btn-primary py-3 px-4" type="submit" form="myform">
-    Изпрати поръчка
-    </button>
-</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+<section class="ftco-section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-7 ftco-animate">
+                <form id="myform" class="billing-form" method="post">
+                    {% csrf_token %}
+                    <h3 class="mb-4 billing-heading">Адрес за доставка</h3>
+                    <div class="row align-items-end">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="firstname">Име</label>
+                                {{ form.first_name }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="lastname">Фамилия</label>
+                                {{ form.last_name }}
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="country">Държава</label>
+                                <div class="select-wrap">
+                                    <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                    {{ form.country }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="streetaddress">Адрес</label>
+                                {{ form.street_address }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form.apartment_address }}
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="towncity">Населено място</label>
+                                {{ form.town }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="postcodezip">Пощенски код</label>
+                                {{ form.zip }}
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">Телефон</label>
+                                {{ form.phone }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="emailaddress">Е-мейл адрес</label>
+                                {{ form.email }}
+                            </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-md-12">
+                            <div class="form-group mt-4">
+                                <div class="radio">
+                                    <label>{{ form.set_default_shipping }} Направи основен адрес за доставка.</label>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-xl-5">
+                <div class="row mt-5 pt-3">
+                    <div class="col-md-12 d-flex mb-5">
+                        <div class="cart-detail cart-total p-3 p-md-4">
+                            <h3 class="billing-heading mb-4">Количка</h3>
+                            <p class="d-flex">
+                                <span>Междинна сума</span>
+                                <span>{{items.0.get_total|floatformat:2|intcomma}} лв.</span>
+                            </p>
+                            <p class="d-flex">
+                                <span>Доставка</span>
+                                <span>{{items.0.get_shipping|floatformat:2|intcomma}} лв.</span>
+                            </p>
+                            <p class="d-flex">
+                                <span>Отстъпка</span>
+                                {% if items.0.coupon.amount %}
+                                <span>-{{items.0.coupon.amount|floatformat:2|intcomma}} лв.</span>
+                                {% else %}
+                                <span>0.00 лв.</span>
+                                {% endif %}
+                            </p>
+                            <hr>
+                            <p class="d-flex total-price">
+                                <span>Общо</span>
+                                <span>{{items.0.get_final_price|floatformat:2|intcomma}} лв.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="cart-detail p-3 p-md-4">
+                            <h3 class="billing-heading mb-4">Начин на плащане</h3>
+                            {% for value, name in form.fields.payment_option.choices %}
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="radio">
+                                        <label for="{{ name }}"><input id="{{ name }}" name="payment_option"
+                                                                       value="{{ value }}" type="radio" class="mr-2"
+                                                                       required> {{ name }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                            </form>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="" class="mr-2"> Прочетох и разбрах
+                                            политиката за поверителност с подробна и допълнителна информация и съм
+                                            съгласен/а с нея.</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <p>
+                                <button class="btn btn-primary py-3 px-4" type="submit" form="myform">
+                                    Изпрати поръчка
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 {% endblock %}

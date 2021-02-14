@@ -1,38 +1,38 @@
 {% load static %}
 
 <div class="col-lg-4 sidebar ftco-animate">
-<div class="sidebar-box">
-{% if user.is_authenticated %}
-<p><a href="{% url 'new article' %}" class="btn btn-primary py-2 px-3">Нова публикация</a></p>
-{% endif %}
-<form action="#" class="search-form">
-<div class="form-group">
-<span class="icon ion-ios-search"></span>
-<input type="text" class="form-control" placeholder="Търси...">
-</div>
-</form>
-</div>
-<div class="sidebar-box ftco-animate">
-<h3 class="heading">Последни</h3>
-{% for article in object_list %}
-    {% if forloop.counter <= 3 %}
-    <div class="block-21 mb-4 d-flex">
-    <a class="blog-img mr-4" style="background-image: url(/media/{{article.image}});"></a>
-    <div class="text">
-    <h3 class="heading-1"><a href="{% url 'view article' article.slug %}">{{article.title}}</a></h3>
-    <div class="meta">
-    <div><a href="#"><span class="icon-calendar"></span> {{article.date}} </a></div>
-    <div><a href="#"><span class="icon-person"></span> {{article.author}} </a></div>
-    <div><a href="#"><span class="icon-chat"></span> 19 </a></div>
+    <div class="sidebar-box">
+        {% if user.is_authenticated %}
+        <p><a href="{% url 'new article' %}" class="btn btn-primary py-2 px-3">Нова публикация</a></p>
+        {% endif %}
+        <form action="#" class="search-form">
+            <div class="form-group">
+                <span class="icon ion-ios-search"></span>
+                <input type="text" class="form-control" placeholder="Търси...">
+            </div>
+        </form>
     </div>
+    <div class="sidebar-box ftco-animate">
+        <h3 class="heading">Последни</h3>
+        {% for article in object_list %}
+        {% if forloop.counter <= 3 %}
+        <div class="block-21 mb-4 d-flex">
+            <a class="blog-img mr-4" style="background-image: url(/media/{{article.image}});"></a>
+            <div class="text">
+                <h3 class="heading-1"><a href="{% url 'view article' article.slug %}">{{article.title}}</a></h3>
+                <div class="meta">
+                    <div><a href="#"><span class="icon-calendar"></span> {{article.date}} </a></div>
+                    <div><a href="#"><span class="icon-person"></span> {{article.author}} </a></div>
+                    <div><a href="#"><span class="icon-chat"></span> 19 </a></div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
     </div>
-    </div>
-    {% endif %}
-{% endfor %}
-</div>
 
-<div class="sidebar-box ftco-animate">
-<h3 class="heading">Tigernuts</h3>
-<p>Като вкус, тигровите ядки се доближават най-много до лешниците.</p>
-</div>
+    <div class="sidebar-box ftco-animate">
+        <h3 class="heading">Tigernuts</h3>
+        <p>Като вкус, тигровите ядки се доближават най-много до лешниците.</p>
+    </div>
 </div>

@@ -3,59 +3,61 @@
 
 {% block body %}
 <div class="hero-wrap hero-bread" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
-<div class="container">
-<div class="row no-gutters slider-text align-items-center justify-content-center">
-<div class="col-md-9 ftco-animate text-center">
-<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span>Любими</span></p>
-<h1 class="mb-0 bread">Любими</h1>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span>
+                    <span>Любими</span></p>
+                <h1 class="mb-0 bread">Любими</h1>
+            </div>
+        </div>
+    </div>
 </div>
 <section class="ftco-section ftco-cart">
-<div class="container">
-<div class="row">
-<div class="col-md-12 ftco-animate">
-<div class="cart-list">
-<table class="table">
-<thead class="thead-primary">
-<tr class="text-center">
-<th>&nbsp;</th>
-<th>Продукти</th>
-<th>&nbsp;</th>
-<th></th>
-<th></th>
-<th>Цена</th>
-</tr>
-</thead>
-<tbody>
-{% for item in data %}
-<tr class="text-center">
-<td class="product-remove">
-    <a href="{{item.item.add_to_favorites_url}}?next={% url 'view wishlist' %}"><span class="ion-ios-close"></span></a>
-</td>
-</td>
-<td class="image-prod">
-<a href="{% url 'view item' item.slug %}" class="img-prod">
-<div class="img" style="background-image:url({% static item.image %});"></div>
-</a>
-</td>
-<td class="product-name">
-<h3><a href="{% url 'view item' item.slug %}">{{item.title}}</a></h3>
-</td>
-<td class="price"></td>
-<td class="quantity">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 ftco-animate">
+                <div class="cart-list">
+                    <table class="table">
+                        <thead class="thead-primary">
+                        <tr class="text-center">
+                            <th>&nbsp;</th>
+                            <th>Продукти</th>
+                            <th>&nbsp;</th>
+                            <th></th>
+                            <th></th>
+                            <th>Цена</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in data %}
+                        <tr class="text-center">
+                            <td class="product-remove">
+                                <a href="{{item.item.add_to_favorites_url}}?next={% url 'view wishlist' %}"><span
+                                        class="ion-ios-close"></span></a>
+                            </td>
+                            </td>
+                            <td class="image-prod">
+                                <a href="{% url 'view item' item.slug %}" class="img-prod">
+                                    <div class="img" style="background-image:url({% static item.image %});"></div>
+                                </a>
+                            </td>
+                            <td class="product-name">
+                                <h3><a href="{% url 'view item' item.slug %}">{{item.title}}</a></h3>
+                            </td>
+                            <td class="price"></td>
+                            <td class="quantity">
 
-</td>
-<td class="total">{{item.discount_price}} лв.</td>
-</tr>
-{% endfor %}
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
+                            </td>
+                            <td class="total">{{item.discount_price}} лв.</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 {% endblock %}

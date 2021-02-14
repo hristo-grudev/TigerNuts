@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+{% load static %}
+{% load humanize %}
+
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700,700i&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/magnific-popup.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/aos.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/ionicons.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.timepicker.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/flaticon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/icomoon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+</head>
+<body>
+<div class="hero-wrap hero-bread" style="background-image: url('{% static 'images/bg_1.jpg' %}');"></div>
+<section class="ftco-section ftco-cart">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 ftco-animate">
+                <div class="cart-list">
+                    <table class="table">
+                        <thead class="thead-primary">
+                        <tr class="text-center">
+                            <th>Продукт</th>
+                            <th>Цена</th>
+                            <th>Количество</th>
+                            <th>Общо</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+                        <tr class="text-center">
+                            <td>{{item.item}}</td>
+                            <td>{{item.get_item_price}} лв.</td>
+                            <td>{{item.quantity}} бр.</td>
+                            <td>{{item.get_total_item_price}} лв.</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <table class="table">
+                        <thead class="thead-primary">
+                        <th colspan="2">Доставка</th>
+                        </thead>
+                        <tr class="text-center">
+                            <td>Имена и телефон:</td>
+                            <td>{{shipping.shipping_address.first_name}} {{shipping.shipping_address.last_name}} -
+                                {{shipping.shipping_address.phone}}
+                            </td>
+                        </tr>
+                        <tr class="text-center">
+                            <td>Адрес за доставка:</td>
+                            <td>{{shipping.shipping_address.country}}, {{shipping.shipping_address.town}},
+                                {{shipping.shipping_address.street_address}}
+                                {{shipping.shipping_address.apartment_address}}
+                            </td>
+                        </tr>
+                        <tr class="text-center">
+                            <td>e-mail:</td>
+                            <td>{{shipping.shipping_address.email}}</td>
+                        </tr>
+
+                    </table>
+                    <table class="table">
+                        <thead class="thead-primary">
+                        <th colspan="2">Крайна цена</th>
+                        </thead>
+                        <tr class="text-center">
+                            <td>Поръчка:</td>
+                            <td>{{shipping.get_total|floatformat:2|intcomma}} лв.</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td>Доставка:</td>
+                            <td>{{shipping.get_shipping|floatformat:2|intcomma}} лв.</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td>Отстъпка:</td>
+                            {% if shipping.coupon %}
+                            <td>-{{shipping.coupon.amount|floatformat:2|intcomma}} лв.</td>
+                            {% else %}
+                            <td>0 лв.</td>
+                            {% endif %}
+                        </tr>
+                        <tr class="text-center">
+                            <td>Общо:</td>
+                            <td>{{shipping.get_final_price|floatformat:2|intcomma}} лв.</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

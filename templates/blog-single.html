@@ -3,84 +3,88 @@
 
 {% block body %}
 <div class="hero-wrap hero-bread" style="background-image: url('{% static 'images\bg_1.jpg' %}');">
-<div class="container">
-<div class="row no-gutters slider-text align-items-center justify-content-center">
-<div class="col-md-9 ftco-animate text-center">
- <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span><a href="{% url 'view blog' %}">Блог</a></span></p>
-<h1 class="mb-0 bread">{{object.title}}</h1>
-</div>
-</div>
-</div>
-</div>
-<section class="ftco-section ftco-degree-bg">
-<div class="container">
-<div class="row">
-<div class="col-lg-8 ftco-animate">
-{% if user == object.author or user_group %}
-    <div class="tag-widget post-tag-container mb-5 mt-5">
-        <div class="tagcloud">
-            <a href="{% url 'edit article' object.slug %}" class="btn btn-primary py-2 px-3">Редактирай</a>
-            <a href="{% url 'delete article' object.slug %}" class="btn btn-danger py-2 px-3">Изтрий</a>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span><a
+                        href="{% url 'view blog' %}">Блог</a></span></p>
+                <h1 class="mb-0 bread">{{object.title}}</h1>
+            </div>
         </div>
     </div>
-{% endif %}
-<h2 class="mb-3">{{object.title}}</h2>
-<p>{{object.description|safe}}</p>
-<p>
-<img src="/media/{{object.image}}" alt="" class="img-fluid">
-</p>
-
-<div class="tag-widget post-tag-container mb-5 mt-5">
-<div class="tagcloud">
-<a href="#" class="tag-cloud-link">{{object.author}}</a>
 </div>
-</div>
+<section class="ftco-section ftco-degree-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 ftco-animate">
+                {% if user == object.author or user_group %}
+                <div class="tag-widget post-tag-container mb-5 mt-5">
+                    <div class="tagcloud">
+                        <a href="{% url 'edit article' object.slug %}" class="btn btn-primary py-2 px-3">Редактирай</a>
+                        <a href="{% url 'delete article' object.slug %}" class="btn btn-danger py-2 px-3">Изтрий</a>
+                    </div>
+                </div>
+                {% endif %}
+                <h2 class="mb-3">{{object.title}}</h2>
+                <p>{{object.description|safe}}</p>
+                <p>
+                    <img src="/media/{{object.image}}" alt="" class="img-fluid">
+                </p>
 
-<div class="pt-5 mt-5">
-<h3 class="mb-5">{{comments_count}} коментара</h3>
-<ul class="comment-list">
+                <div class="tag-widget post-tag-container mb-5 mt-5">
+                    <div class="tagcloud">
+                        <a href="#" class="tag-cloud-link">{{object.author}}</a>
+                    </div>
+                </div>
 
-{% for comment in comments %}
-<li class="comment">
-<div class="vcard bio">
-<img src="{% static 'images/Anonymous-Avatar.png' %}" alt="Image placeholder">
-</div>
-<div class="comment-body">
-<h3>{{comment.author}}</h3>
-<div class="meta">{{comment.date}}</div>
-<p>{{comment.message}}</p>
-{% if user == comment.author or user_group %}
-<div class="tag-widget post-tag-container mb-5 mt-5">
-    <div class="tagcloud">
-        <a href="{% url 'edit comment' object.slug comment.id %}" class="btn btn-primary py-2 px-3">Редактирай</a>
-        <a href="{% url 'delete comment' object.slug comment.id %}" class="btn btn-danger py-2 px-3">Изтрий</a>
+                <div class="pt-5 mt-5">
+                    <h3 class="mb-5">{{comments_count}} коментара</h3>
+                    <ul class="comment-list">
+
+                        {% for comment in comments %}
+                        <li class="comment">
+                            <div class="vcard bio">
+                                <img src="{% static 'images/Anonymous-Avatar.png' %}" alt="Image placeholder">
+                            </div>
+                            <div class="comment-body">
+                                <h3>{{comment.author}}</h3>
+                                <div class="meta">{{comment.date}}</div>
+                                <p>{{comment.message}}</p>
+                                {% if user == comment.author or user_group %}
+                                <div class="tag-widget post-tag-container mb-5 mt-5">
+                                    <div class="tagcloud">
+                                        <a href="{% url 'edit comment' object.slug comment.id %}"
+                                           class="btn btn-primary py-2 px-3">Редактирай</a>
+                                        <a href="{% url 'delete comment' object.slug comment.id %}"
+                                           class="btn btn-danger py-2 px-3">Изтрий</a>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+
+                    <div class="comment-form-wrap pt-5">
+                        <h3 class="mb-5">Изпрати коментар</h3>
+
+                        <form action="{% url 'leave comment' object.slug %}" method="POST" class="p-5 bg-light"
+                              enctype="multipart/form-data">
+
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button class="btn btn-primary py-3 px-5">Изпрати</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+            {% include 'blog-right.html' %}
+        </div>
     </div>
-</div>
-{% endif %}
-</div>
-</li>
-{% endfor %}
- </ul>
-
-
-<div class="comment-form-wrap pt-5">
-<h3 class="mb-5">Изпрати коментар</h3>
-
-   <form action="{% url 'leave comment' object.slug %}" method="POST" class="p-5 bg-light" enctype="multipart/form-data">
-
-       {% csrf_token %}
-       {{ form.as_p }}
-       <button class="btn btn-primary py-3 px-5">Изпрати</button>
-   </form>
-</div>
-
-</div>
-</div>
-
- {% include 'blog-right.html' %}
-</div>
-</div>
-</div>
+    </div>
 
 </section>
 

@@ -4,64 +4,69 @@
 {% block body %}
 
 <div class="hero-wrap hero-bread" style="background-image: url({% static 'images/bg_1.jpg' %});">
-<div class="container">
-<div class="row no-gutters slider-text align-items-center justify-content-center">
-<div class="col-md-9 ftco-animate text-center">
-<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span>Свържи се с нас</span></p>
-<h1 class="mb-0 bread">Свържи се с нас</h1>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span>Свържи се с нас</span>
+                </p>
+                <h1 class="mb-0 bread">Свържи се с нас</h1>
+            </div>
+        </div>
+    </div>
 </div>
 <section class="ftco-section contact-section bg-light">
-<div class="container">
-<div class="row d-flex mb-5 contact-info">
-<div class="w-100"></div>
-<div class="col-md-3 d-flex">
-<div class="info bg-white p-4">
-<p><span>Адрес:<a href="https://www.google.bg/maps/place/SkyCity+Mall/@42.6801713,23.367079,17z/data=!4m5!3m4!1s0x40aa85c2f052c8d1:0x649126937aee035!8m2!3d42.6798085!4d23.3675618">гр. София, ул. Коста Лулчев 1574</a></span></p>
-</div>
-</div>
-<div class="col-md-3 d-flex">
-<div class="info bg-white p-4">
-<p><span>Телефон:</span> <a href="tel://+359 888 266 833">+359 888 266 833</a></p>
-</div>
-</div>
-<div class="col-md-3 d-flex">
-<div class="info bg-white p-4">
-<p><span>Email:</span> <a href="mailto: suport@tigernutsbulgaria.com">suport@tigernutsbulgaria.com</span></a></p>
-</div>
-</div>
-<div class="col-md-3 d-flex">
-<div class="info bg-white p-4">
-<p><span>Website</span> <a href="https://tigernutbulgaria.com/">tigernutbulgaria.com/</a></p>
-</div>
-</div>
-</div>
-<div class="row block-9">
-<div class="col-md-6 order-md-last d-flex">
-<form action="#" class="bg-white p-5 contact-form">
-<div class="form-group">
-<input type="text" class="form-control" placeholder="Име">
-</div>
-<div class="form-group">
-<input type="text" class="form-control" placeholder="Е-мейл">
-</div>
-<div class="form-group">
-<input type="text" class="form-control" placeholder="Относно">
-</div>
-<div class="form-group">
-<textarea name="" id="" cols="30" rows="7" class="form-control" placeholder="Съобщение"></textarea>
-</div>
-<div class="form-group">
-<input type="submit" value="Изпрати съобщение" class="btn btn-primary py-3 px-5">
-</div>
-</form>
-</div>
-<div class="col-md-6 d-flex">
-<div id="map" class="bg-white"></div>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="row d-flex mb-5 contact-info">
+            <div class="w-100"></div>
+            <div class="col-md-3 d-flex">
+                <div class="info bg-white p-4">
+                    <p><span>Адрес:<a
+                            href="https://www.google.bg/maps/place/SkyCity+Mall/@42.6801713,23.367079,17z/data=!4m5!3m4!1s0x40aa85c2f052c8d1:0x649126937aee035!8m2!3d42.6798085!4d23.3675618">гр. София, ул. Коста Лулчев 1574</a></span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex">
+                <div class="info bg-white p-4">
+                    <p><span>Телефон:</span> <a href="tel://+359 888 266 833">+359 888 266 833</a></p>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex">
+                <div class="info bg-white p-4">
+                    <p><span>Email:</span> <a
+                            href="mailto: suport@tigernutsbulgaria.com">suport@tigernutsbulgaria.com</span></a></p>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex">
+                <div class="info bg-white p-4">
+                    <p><span>Website</span> <a href="https://tigernutbulgaria.com/">tigernutbulgaria.com/</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="row block-9">
+            <div class="col-md-6 order-md-last d-flex">
+                <form action="#" class="bg-white p-5 contact-form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Име">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Е-мейл">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Относно">
+                    </div>
+                    <div class="form-group">
+                        <textarea name="" id="" cols="30" rows="7" class="form-control"
+                                  placeholder="Съобщение"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Изпрати съобщение" class="btn btn-primary py-3 px-5">
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 d-flex">
+                <div id="map" class="bg-white"></div>
+            </div>
+        </div>
+    </div>
 </section>
 {% endblock %}

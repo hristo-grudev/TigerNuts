@@ -109,8 +109,6 @@ class Order(models.Model):
         total = 0
         for order_item in self.items.all():
             total += order_item.get_total_item_price()
-        if self.coupon:
-            total -= self.coupon.amount
         return total
 
     def get_shipping(self):
@@ -125,6 +123,8 @@ class Order(models.Model):
         total = self.get_total()
         shipping = self.get_shipping()
         final_price = total + shipping
+        if self.coupon:
+            final_price -= self.coupon.amount
         return final_price
 
 

@@ -4,71 +4,84 @@
 
 {% block body %}
 <div class="hero-wrap hero-bread" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
-<div class="container">
-<div class="row no-gutters slider-text align-items-center justify-content-center">
-<div class="col-md-9 ftco-animate text-center">
-<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span>Магазин</span></p>
-<h1 class="mb-0 bread">Магазин</h1>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span>Магазин</span>
+                </p>
+                <h1 class="mb-0 bread">Магазин</h1>
+            </div>
+        </div>
+    </div>
 </div>
 <section class="ftco-section">
-<div class="container">
+    <div class="container">
 
-<div class="row">
-{% for item in data %}
-<div class="col-md-6 col-lg-3 ftco-animate">
-<div class="product">
-<a href="{% url 'view item' item.slug %}" class="img-prod"><img class="img-fluid" src="{% static item.image %}" alt="Tigernuts" height="124">
-<span class="status">{{item.percent}}%</span>
-<div class="overlay"></div>
-</a>
-<div class="text py-3 pb-4 px-3 text-center">
-<h3><a href="{% url 'view item' item.slug %}">{{item.title}}</a></h3>
-<div class="d-flex">
-<div class="pricing">
-<p class="price"><span class="mr-2 price-dc">{{item.price|floatformat:2|intcomma}} лв.</span><span class="price-sale">{{item.discount_price|floatformat:2|intcomma}} лв.</span></p>
-</div>
-</div>
-<div class="bottom-area d-flex px-3">
-<div class="m-auto d-flex">
-<a href="{{ item.item.get_add_to_cart_url }}" class="d-flex justify-content-center align-items-center text-center">
-<span><i class="ion-ios-menu"></i></span>
+        <div class="row">
+            {% for item in data %}
+            <div class="col-md-6 col-lg-3 ftco-animate">
+                <div class="product">
+                    <a href="{% url 'view item' item.slug %}" class="img-prod"><img class="img-fluid"
+                                                                                    src="{% static item.image %}"
+                                                                                    alt="Tigernuts" height="124">
+                        <span class="status">{{item.percent}}%</span>
+                        <div class="overlay"></div>
+                    </a>
+                    <div class="text py-3 pb-4 px-3 text-center">
+                        <h3><a href="{% url 'view item' item.slug %}">{{item.title}}</a></h3>
+                        <div class="d-flex">
+                            <div class="pricing">
+                                <p class="price"><span
+                                        class="mr-2 price-dc">{{item.price|floatformat:2|intcomma}} лв.</span><span
+                                        class="price-sale">{{item.discount_price|floatformat:2|intcomma}} лв.</span></p>
+                            </div>
+                        </div>
+                        <div class="bottom-area d-flex px-3">
+                            <div class="m-auto d-flex">
+                                <a href="{{ item.item.get_add_to_cart_url }}"
+                                   class="d-flex justify-content-center align-items-center text-center">
+                                    <span><i class="ion-ios-menu"></i></span>
 
-<a href="{{ item.item.get_add_to_cart_url }}" class="buy-now d-flex justify-content-center align-items-center mx-1">
-    <span><i class="ion-ios-cart"></i></span>
-</a>
+                                    <a href="{{ item.item.get_add_to_cart_url }}"
+                                       class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                        <span><i class="ion-ios-cart"></i></span>
+                                    </a>
 
-<a href="{{ item.item.add_to_favorites_url }}" class="heart d-flex justify-content-center align-items-center ">
-    <span><i class="ion-ios-heart"></i></span>
-</a>
-</div>
-</div>
-</div>
-</div>
-</div>
-{% endfor %}
-</div>
-<div class="row mt-5">
-<div class="col text-center">
-<div class="block-27">
-<ul>
-<li><a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&lt;</a></li>
-{% for num in page_obj.paginator %}
-    {% ifequal num.number page_obj.number %}
-        <li><a href="#" active>{{num.number}}</a></li>
-      {% else %}
-        <li><a href="?page={{ num.number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{num.number}}</a></li>
-      {% endifequal %}
+                                    <a href="{{ item.item.add_to_favorites_url }}"
+                                       class="heart d-flex justify-content-center align-items-center ">
+                                        <span><i class="ion-ios-heart"></i></span>
+                                    </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row mt-5">
+            <div class="col text-center">
+                <div class="block-27">
+                    <ul>
+                        <li>
+                            <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&lt;</a>
+                        </li>
+                        {% for num in page_obj.paginator %}
+                        {% ifequal num.number page_obj.number %}
+                        <li><a href="#" active>{{num.number}}</a></li>
+                        {% else %}
+                        <li><a href="?page={{ num.number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{num.number}}</a>
+                        </li>
+                        {% endifequal %}
 
-{% endfor %}
-<li><a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&gt;</a></li>
-</ul>
-</div>
-</div>
-</div>
-</div>
+                        {% endfor %}
+                        <li>
+                            <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&gt;</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 {% endblock %}

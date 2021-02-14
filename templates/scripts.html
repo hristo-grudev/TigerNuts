@@ -19,11 +19,15 @@
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23581568-13"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    window.dataLayer = window.dataLayer || [];
 
-  gtag('config', 'UA-23581568-13');
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'UA-23581568-13');
 </script>
 
 <script>
@@ -44,52 +48,53 @@
     }
 
     function uuidv4() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-      });
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
     }
+
     let device = getCookie('device')
 
-    if (device == null || device ==undefined){
+    if (device == null || device == undefined) {
         device = uuidv4()
     }
 
     document.cookie = 'device=' + device + ";domain=;path=/"
 </script>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function () {
 
-		var quantitiy=0;
-		   $('.quantity-right-plus').click(function(e){
+        var quantitiy = 0;
+        $('.quantity-right-plus').click(function (e) {
 
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
+            // Stop acting like a button
+            e.preventDefault();
+            // Get the field name
+            var quantity = parseInt($('#quantity').val());
 
-		        // If is not undefined
+            // If is not undefined
 
-		            $('#quantity').val(quantity + 1);
+            $('#quantity').val(quantity + 1);
 
 
-		            // Increment
+            // Increment
 
-		    });
+        });
 
-		     $('.quantity-left-minus').click(function(e){
-		        // Stop acting like a button
-		        e.preventDefault();
-		        // Get the field name
-		        var quantity = parseInt($('#quantity').val());
+        $('.quantity-left-minus').click(function (e) {
+            // Stop acting like a button
+            e.preventDefault();
+            // Get the field name
+            var quantity = parseInt($('#quantity').val());
 
-		        // If is not undefined
+            // If is not undefined
 
-		            // Increment
-		            if(quantity>0){
-		            $('#quantity').val(quantity - 1);
-		            }
-		    });
+            // Increment
+            if (quantity > 0) {
+                $('#quantity').val(quantity - 1);
+            }
+        });
 
-		});
+    });
 </script>

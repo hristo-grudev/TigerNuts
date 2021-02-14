@@ -3,82 +3,101 @@
 
 {% block body %}
 <div class="hero-wrap hero-bread" style="background-image: url('{% static 'images\bg_1.jpg' %}');">
-<div class="container">
-<div class="row no-gutters slider-text align-items-center justify-content-center">
-<div class="col-md-9 ftco-animate text-center">
-<p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span>За нас</span></p>
-<h1 class="mb-0 bread">За нас</h1>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span>
+                    <span>За нас</span></p>
+                <h1 class="mb-0 bread">За нас</h1>
+            </div>
+        </div>
+    </div>
 </div>
 <section class="ftco-section ftco-no-pb ftco-no-pt bg-light">
-<div class="container">
-<div class="row">
-<div class="col-md-5 p-md-5 img img-2 d-flex justify-content-center align-items-center" style="background-image: url({% static 'images/bg_1.jpg' %});">
-<a href="https://vimeo.com/45830194" class="icon popup-vimeo d-flex justify-content-center align-items-center">
-<span class="icon-play"></span>
-</a>
-</div>
-<div class="col-md-7 py-5 wrap-about pb-md-5 ftco-animate">
-<div class="heading-section-bold mb-4 mt-md-5">
-<div class="ml-md-0">
-<h2 class="mb-4">Добре дошли в сайта на Tigernuts</h2>
-</div>
-</div>
-<div class="pb-md-5">
-<p>Здравейте, скъпи гости! Тук ще можете да откриете и закупите различни продукти от тази здравословна суперхрана, наречена тигрова ядка. Официален вносител сме на тази суровина и се стремим да популяризираме и в България този толкова уникален с качествата си продукт.</p>
-<p>Бихме искали да дадем избор и алтернатива на хората за достъп до чиста храна, която няма алергени, не съдържа ГМО, няма глутен и притежава цял букет от полезни съставки и витамини. Именно това притежава тигровата ядка. </p>
-<p>Но нека ви разкажем повече за нея. Тя е сладка и с приятен вкус, наподобяващ смес от орех, кокос и кашу. Чудесен пребиотик, подходящ за веган диети и с високо съдържание на фибри. Естествените захари в тигровите ядки им придават приятния сладък вкус без нужда от подсладител. Спомагат регулирането на кръвната захар. Високото съдържание на калий подобрява и кръвното налягане. Ядката е богата на езними като амилаза, липаза и каталаза, които спомагат развитието на добрите бактерии и подобряват храносмилането. Наричат я супер храна на бъдещето и заради това, че съдържа много полезни хранителни вещества, фибри, калций, натрий, магнезий, фосфор, желязо, мед и цинк. Рядък източник е на устойчиво нишесте и влакнини, от които 25% въглехидрати и полезни мазнини.</p>
-<p>Стремим се да не правим компромис с качеството на продуктите си и ще се радваме да бъдем полезни и заедно да успеем да популяризираме тази супер храна, за да бъде тя все все по-позната и достъпна и за хората тук в България. Осъзнавайки огромния здравословен потенциал на тази "ядка", ние вече имаме своята малка мисия - да дарим със здраве, насалада и усмивка още едно лице. Признаваме, че предизвикателството е голямо, но нима не си струва?</p>
-<p><a href="{% url 'view shop' %}" class="btn btn-primary">Пазарувай сега</a></p>
-</div>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5 p-md-5 img img-2 d-flex justify-content-center align-items-center"
+                 style="background-image: url({% static 'images/bg_1.jpg' %});">
+                <a href="https://vimeo.com/45830194"
+                   class="icon popup-vimeo d-flex justify-content-center align-items-center">
+                    <span class="icon-play"></span>
+                </a>
+            </div>
+            <div class="col-md-7 py-5 wrap-about pb-md-5 ftco-animate">
+                <div class="heading-section-bold mb-4 mt-md-5">
+                    <div class="ml-md-0">
+                        <h2 class="mb-4">Добре дошли в сайта на Tigernuts</h2>
+                    </div>
+                </div>
+                <div class="pb-md-5">
+                    <p>Здравейте, скъпи гости! Тук ще можете да откриете и закупите различни продукти от тази
+                        здравословна суперхрана, наречена тигрова ядка. Официален вносител сме на тази суровина и се
+                        стремим да популяризираме и в България този толкова уникален с качествата си продукт.</p>
+                    <p>Бихме искали да дадем избор и алтернатива на хората за достъп до чиста храна, която няма
+                        алергени, не съдържа ГМО, няма глутен и притежава цял букет от полезни съставки и витамини.
+                        Именно това притежава тигровата ядка. </p>
+                    <p>Но нека ви разкажем повече за нея. Тя е сладка и с приятен вкус, наподобяващ смес от орех, кокос
+                        и кашу. Чудесен пребиотик, подходящ за веган диети и с високо съдържание на фибри. Естествените
+                        захари в тигровите ядки им придават приятния сладък вкус без нужда от подсладител. Спомагат
+                        регулирането на кръвната захар. Високото съдържание на калий подобрява и кръвното налягане.
+                        Ядката е богата на езними като амилаза, липаза и каталаза, които спомагат развитието на добрите
+                        бактерии и подобряват храносмилането. Наричат я супер храна на бъдещето и заради това, че
+                        съдържа много полезни хранителни вещества, фибри, калций, натрий, магнезий, фосфор, желязо, мед
+                        и цинк. Рядък източник е на устойчиво нишесте и влакнини, от които 25% въглехидрати и полезни
+                        мазнини.</p>
+                    <p>Стремим се да не правим компромис с качеството на продуктите си и ще се радваме да бъдем полезни
+                        и заедно да успеем да популяризираме тази супер храна, за да бъде тя все все по-позната и
+                        достъпна и за хората тук в България. Осъзнавайки огромния здравословен потенциал на тази "ядка",
+                        ние вече имаме своята малка мисия - да дарим със здраве, насалада и усмивка още едно лице.
+                        Признаваме, че предизвикателството е голямо, но нима не си струва?</p>
+                    <p><a href="{% url 'view shop' %}" class="btn btn-primary">Пазарувай сега</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 {% include 'subscribe.html' %}
 <section class="ftco-section ftco-counter img" id="section-counter" style="background-image: url(images/bg_3.jpg);">
-<div class="container">
-<div class="row justify-content-center py-5">
-<div class="col-md-10">
-<div class="row">
-<div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
-<div class="block-18 text-center">
-<div class="text">
-<strong class="number" data-number="10000">0</strong>
-<span>Happy Customers</span>
-</div>
-</div>
-</div>
-<div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
-<div class="block-18 text-center">
-<div class="text">
-<strong class="number" data-number="100">0</strong>
-<span>Branches</span>
-</div>
-</div>
-</div>
-<div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
-<div class="block-18 text-center">
-<div class="text">
-<strong class="number" data-number="1000">0</strong>
-<span>Partner</span>
-</div>
-</div>
-</div>
-<div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
-<div class="block-18 text-center">
-<div class="text">
-<strong class="number" data-number="100">0</strong>
-<span>Awards</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="row justify-content-center py-5">
+            <div class="col-md-10">
+                <div class="row">
+                    <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="10000">0</strong>
+                                <span>Happy Customers</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="100">0</strong>
+                                <span>Branches</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="1000">0</strong>
+                                <span>Partner</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-center counter-wrap ftco-animate">
+                        <div class="block-18 text-center">
+                            <div class="text">
+                                <strong class="number" data-number="100">0</strong>
+                                <span>Awards</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 {% include 'cool-line.html' %}

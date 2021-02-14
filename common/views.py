@@ -1,7 +1,7 @@
 import random, string
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
@@ -9,13 +9,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
-from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 
 from .forms import ItemForm, CheckoutForm, CouponForm
 from .models import Item, ItemImages, OrderItem, WishList, Order, Address, Coupon, Payment
 
 def create_ref_code():
-    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
+    return ''.join(random.choices(string.digits, k=10))
 
 def is_valid_form(values):
     valid = True
@@ -64,6 +64,7 @@ class HomePage(ListView):
                          'image': image.image})
         context['data'] = data
         print(data)
+
         user = get_user(self.request, False)
         context['user'] = user
 
@@ -250,13 +251,13 @@ class CartView(ListView):
         user = get_user(self.request, False)
         context['user'] = user
         cart_details = OrderItem.objects.filter(user=user, ordered=False)
+
         data = []
         grand_total_price = 0
         for item in cart_details:
             pk = item.item.id
             slug = item.item.slug
             image = ItemImages.objects.filter(title=pk).first()
-            grand_total_price += item.get_total_item_price()
             data.append({'title': item.item.title,
                          'id': item.id,
                          'slug': slug,
@@ -267,13 +268,14 @@ class CartView(ListView):
                          'total': item.get_total_item_price,
                          'image': image.image,
                          })
-        context['delivery'] = 0
         if 0 < grand_total_price < 100:
             context['delivery'] = 5
         context['cart_details'] = cart_details
         context['data'] = data
         context['couponform'] = CouponForm()
         context['grand_total_price'] = grand_total_price
+        items = Order.objects.filter(user=user, ordered=False)
+        context['items'] = items
         return context
 
 
@@ -309,19 +311,16 @@ class CheckOutView(View):
             user = get_user(self.request, False)
             order = Order.objects.get(user=user, ordered=False)
             form = CheckoutForm()
-            delivery = 0
             context = {
                 'form': form,
                 'order': order,
-                'delivery': delivery,
+                'user': user,
             }
             cart_details = OrderItem.objects.filter(user=user).filter(ordered=False)
             data = []
-            grand_total_price = 0
             for item in cart_details:
                 pk = item.item.id
                 image = ItemImages.objects.filter(title=pk).first()
-                grand_total_price += item.get_total_item_price()
                 data.append({'title': item.item.title,
                              'id': item.id,
                              'discount_price': item.item.discount_price,
@@ -330,14 +329,14 @@ class CheckOutView(View):
                              'total': item.get_total_item_price,
                              'image': image.image})
             context['delivery'] = 0
-            if 0 < grand_total_price < 100:
-                context['delivery'] = 5
             context['cart_details'] = cart_details
             context['data'] = data
-            context['grand_total_price'] = grand_total_price
+
+            items = Order.objects.filter(user=user, ordered=False)
+            context['items'] = items
 
             shipping_address_qs = Address.objects.filter(
-                user=self.request.user,
+                user=user,
                 default=True
             )
             if shipping_address_qs.exists():
@@ -448,11 +447,12 @@ def get_coupon(request, code):
 class AddCouponView(View):
     def post(self, *args, **kwargs):
         form = CouponForm(self.request.POST or None)
+        user = get_user(self.request, False)
         if form.is_valid():
             try:
                 code = form.cleaned_data.get('code')
                 order = Order.objects.get(
-                    user=self.request.user, ordered=False)
+                    user=user, ordered=False)
                 order.coupon = get_coupon(self.request, code)
                 order.save()
                 messages.success(self.request, "Successfully added coupon")
@@ -462,7 +462,7 @@ class AddCouponView(View):
                 return redirect("view cart")
 
 
-class PaymentView(LoginRequiredMixin, ListView):
+class PaymentView(ListView):
     model = Order
     template_name = 'summary.html'
 
@@ -472,6 +472,7 @@ class PaymentView(LoginRequiredMixin, ListView):
         items = Order.objects.filter(user=user, ordered=False)
 
         context['items'] = items
+        context['user'] = user
 
         return context
 
@@ -510,6 +511,7 @@ def remove_single_item_from_cart(request, slug):
 class FinishOrder(View):
     def get(self, *args, **kwargs):
         user = get_user(self.request, False)
+
         try:
             order = Order.objects.get(user=user, ordered=False)
             order_items = order.items.all()
@@ -517,13 +519,22 @@ class FinishOrder(View):
             order.ordered = True
             order.ref_code = create_ref_code()
             order.save()
+            new_data = Order.objects.filter(ref_code=order.ref_code)
+            list_of_items_html = {'shipping': new_data[0], 'items': order_items}
+            email_body = render_to_string('email.html', context=list_of_items_html)
+            print(email_body)
+            email = EmailMultiAlternatives(f'Поръчка №:{order.ref_code}', email_body, to=[order.shipping_address.email])
+            email.attach_alternative(email_body, "text/html")
+            email.send()
             return redirect("completed order")
         except:
             return redirect("completed order")
 
 
 def order_success(request):
+    user = get_user(request, False)
     context = {
-        'message': 'Поръчката е изпратена успешно.'
+        'message': 'Поръчката е изпратена успешно.',
+        'user': user,
     }
     return render(request, "order_success.html", context)

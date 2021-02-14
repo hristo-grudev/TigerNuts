@@ -7,91 +7,98 @@
 {% include 'header.html' %}
 
 <section class="ftco-section">
-<div class="container">
-<div class="row justify-content-center mb-3 pb-3">
-<div class="col-md-12 heading-section text-center ftco-animate">
-<span class="subheading">Специални продукти</span>
-<h2 class="mb-4">Нашите продукти</h2>
-<p>Като вкус, тигровите ядки се доближават най-много до лешниците.</p>
-</div>
-</div>
-</div>
-<div class="container">
-<div class="row">
-{% for item in data %}
-<div class="col-md-6 col-lg-3 ftco-animate">
-<div class="product">
-<a href="{% url 'view item' item.slug %}" class="img-prod"><img class="img-fluid" src="{% static item.image %}" alt="Tigernuts">
-<span class="status">{{item.percent}}%</span>
-<div class="overlay"></div>
-</a>
-<div class="text py-3 pb-4 px-3 text-center">
-<h3><a href="{% url 'view item' item.slug %}">{{item.title}}</a></h3>
-<div class="d-flex">
-<div class="pricing">
-<p class="price"><span class="mr-2 price-dc">{{item.price|floatformat:2|intcomma}} лв.</span><span class="price-sale">{{item.discount_price|floatformat:2|intcomma}} лв.</span></p>
-</div>
-</div>
-<div class="bottom-area d-flex px-3">
-<div class="m-auto d-flex">
+    <div class="container">
+        <div class="row justify-content-center mb-3 pb-3">
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <span class="subheading">Специални продукти</span>
+                <h2 class="mb-4">Нашите продукти</h2>
+                <p>Като вкус, тигровите ядки се доближават най-много до лешниците.</p>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            {% for item in data %}
+            <div class="col-md-6 col-lg-3 ftco-animate">
+                <div class="product">
+                    <a href="{% url 'view item' item.slug %}" class="img-prod"><img class="img-fluid"
+                                                                                    src="{% static item.image %}"
+                                                                                    alt="Tigernuts">
+                        <span class="status">{{item.percent}}%</span>
+                        <div class="overlay"></div>
+                    </a>
+                    <div class="text py-3 pb-4 px-3 text-center">
+                        <h3><a href="{% url 'view item' item.slug %}">{{item.title}}</a></h3>
+                        <div class="d-flex">
+                            <div class="pricing">
+                                <p class="price"><span
+                                        class="mr-2 price-dc">{{item.price|floatformat:2|intcomma}} лв.</span><span
+                                        class="price-sale">{{item.discount_price|floatformat:2|intcomma}} лв.</span></p>
+                            </div>
+                        </div>
+                        <div class="bottom-area d-flex px-3">
+                            <div class="m-auto d-flex">
 
-<a href="{{ item.item.get_add_to_cart_url }}" class="d-flex justify-content-center align-items-center text-center">
-<span><i class="ion-ios-menu"></i></span>
+                                <a href="{{ item.item.get_add_to_cart_url }}"
+                                   class="d-flex justify-content-center align-items-center text-center">
+                                    <span><i class="ion-ios-menu"></i></span>
 
-<a href="{{ item.item.get_add_to_cart_url }}" class="buy-now d-flex justify-content-center align-items-center mx-1">
-    <span><i class="ion-ios-cart"></i></span>
-</a>
+                                    <a href="{{ item.item.get_add_to_cart_url }}"
+                                       class="buy-now d-flex justify-content-center align-items-center mx-1">
+                                        <span><i class="ion-ios-cart"></i></span>
+                                    </a>
 
-<a href="{{ item.item.add_to_favorites_url }}" class="heart d-flex justify-content-center align-items-center ">
-    <span><i class="ion-ios-heart"></i></span>
-</a>
+                                    <a href="{{ item.item.add_to_favorites_url }}"
+                                       class="heart d-flex justify-content-center align-items-center ">
+                                        <span><i class="ion-ios-heart"></i></span>
+                                    </a>
 
-</div>
-</div>
-</div>
-</div>
-</div>
-{% endfor %}
-</div>
-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </section>
 <section class="ftco-section img" style="background-image: url({% static 'images/bg_2.jpg' %});">
-<div class="container">
-<div class="row justify-content-end">
-<div class="col-md-6 heading-section ftco-animate deal-of-the-day ftco-animate">
-<span class="subheading">Най-добрата цена</span>
-<h2 class="mb-4">Сделка на месеца</h2>
-<p>Тахан от висококачествени екологично чисти български лешници и тигрова ядка в съотношение 2:1.</p>
-<h3><a href="#">Тахан от лешник и тигрова ядка</a></h3>
-<span class="price">15 лв. <a href="#">Сега само 13 лв.</a></span>
-<div id="timer" class="d-flex mt-5">
-<div class="time" id="days"></div>
-<div class="time pl-3" id="hours"></div>
-<div class="time pl-3" id="minutes"></div>
-<div class="time pl-3" id="seconds"></div>
-</div>
-</div>
-</div>
-</div>
+    <div class="container">
+        <div class="row justify-content-end">
+            <div class="col-md-6 heading-section ftco-animate deal-of-the-day ftco-animate">
+                <span class="subheading">Най-добрата цена</span>
+                <h2 class="mb-4">Сделка на месеца</h2>
+                <p>Тахан от висококачествени екологично чисти български лешници и тигрова ядка в съотношение 2:1.</p>
+                <h3><a href="#">Тахан от лешник и тигрова ядка</a></h3>
+                <span class="price">15 лв. <a href="#">Сега само 13 лв.</a></span>
+                <div id="timer" class="d-flex mt-5">
+                    <div class="time" id="days"></div>
+                    <div class="time pl-3" id="hours"></div>
+                    <div class="time pl-3" id="minutes"></div>
+                    <div class="time pl-3" id="seconds"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section></section>
 <hr>
 <section class="ftco-section ftco-no-pt ftco-no-pb py-5 bg-light">
-<div class="container py-4">
-<div class="row d-flex justify-content-center py-5">
-<div class="col-md-6">
-<h2 style="font-size: 22px;" class="mb-0">Запиши се за нашите новини</h2>
-<span>Получи e-mail за нашите оферти в магази на ни.</span>
-</div>
-<div class="col-md-6 d-flex align-items-center">
-<form action="#" class="subscribe-form">
-<div class="form-group d-flex">
-<input type="text" class="form-control" placeholder="Enter email address">
-<input type="submit" value="Запиши се" class="submit px-3">
-</div>
-</form>
-</div>
-</div>
-</div>
+    <div class="container py-4">
+        <div class="row d-flex justify-content-center py-5">
+            <div class="col-md-6">
+                <h2 style="font-size: 22px;" class="mb-0">Запиши се за нашите новини</h2>
+                <span>Получи e-mail за нашите оферти в магази на ни.</span>
+            </div>
+            <div class="col-md-6 d-flex align-items-center">
+                <form action="#" class="subscribe-form">
+                    <div class="form-group d-flex">
+                        <input type="text" class="form-control" placeholder="Enter email address">
+                        <input type="submit" value="Запиши се" class="submit px-3">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </section>
 
 {% endblock %}
