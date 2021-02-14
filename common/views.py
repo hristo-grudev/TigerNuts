@@ -380,7 +380,7 @@ class CheckOutView(View):
 
                     if is_valid_form([first_name, last_name, town, street_address,
                                       country, zip, phone, email]):
-                        shipping_address = Address(
+                        shipping_address, created = Address.objects.get_or_create(
                             user=user,
                             first_name=first_name,
                             last_name=last_name,
@@ -392,8 +392,6 @@ class CheckOutView(View):
                             phone=phone,
                             email=email
                         )
-                        shipping_address.save()
-
                         order.shipping_address = shipping_address
                         order.save()
 

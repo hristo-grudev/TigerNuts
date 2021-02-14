@@ -9,6 +9,11 @@ PAYMENT_CHOICES = (
 
 COUNTRY_CHOICES = (
     ('BG', 'България'),
+    ('RO', 'Romania'),
+    ('GR', 'Greece'),
+    ('GR', 'Greece'),
+    ('SR', 'Serbia'),
+    ('MK', 'North Macedonia'),
 )
 
 class NewsModal(forms.ModelForm):
@@ -40,7 +45,7 @@ class CheckoutForm(forms.Form):
     town = forms.CharField(required=False)
     street_address = forms.CharField(required=False)
     apartment_address = forms.CharField(required=False)
-    country = forms.CharField(required=False)
+    country = forms.ChoiceField(required=False, choices=COUNTRY_CHOICES)
     zip = forms.CharField(required=False)
     phone = forms.CharField(required=False)
     email = forms.CharField(required=False)
