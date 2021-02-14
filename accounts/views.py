@@ -27,9 +27,11 @@ class UserRegisterView(CreateView):
 
 
 def register(request):
+    user = get_user(request)
     context = {
         'user_form': RegisterForm(),
         'profile_form': ProfileForm(),
+        'user': user,
     }
     return render(request, 'register.html', context)
 
