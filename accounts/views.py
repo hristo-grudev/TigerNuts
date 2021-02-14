@@ -28,6 +28,7 @@ class UserRegisterView(CreateView):
 
 def register(request):
     user = get_user(request)
+    print(user)
     context = {
         'user_form': RegisterForm(),
         'profile_form': ProfileForm(),
@@ -38,10 +39,13 @@ def register(request):
 
 @transaction.atomic  # изпълнява всички или нито една
 def register_user(request):
+    user = get_user(request)
     if request.method == 'GET':
+
         context = {
             'user_form': RegisterForm(),
             'profile_form': ProfileForm(),
+            'user': user,
         }
         return render(request, 'register.html', context)
     else:
@@ -65,6 +69,7 @@ def register_user(request):
         context = {
             'user_form': RegisterForm(),
             'profile_form': ProfileForm(),
+            'user': user,
         }
         return render(request, 'register.html', context)
 
