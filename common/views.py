@@ -1,6 +1,7 @@
 import random, string
 
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -535,3 +536,30 @@ def order_success(request):
         'user': user,
     }
     return render(request, "order_success.html", context)
+
+
+class UserOrders(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'user-orders.html'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        orders = Order.objects.filter(user=self.request.user, ordered=True)
+        context['orders'] = orders
+        return context
+
+
+class UserOrderDetails(LoginRequiredMixin, DetailView):
+    model = Order
+    template_name = 'user-order-summary.html'
+    query_pk_and_slug = True
+    slug_field = 'ref_code'
+    slug_url_kwarg = 'ref_code'
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ref_code = kwargs['object'].ref_code
+        items = Order.objects.filter(ref_code=ref_code)
+        context['items'] = items
+
+        return context

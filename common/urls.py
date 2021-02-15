@@ -2,7 +2,7 @@ from django.urls import path
 
 from common.views import HomePage, ItemDetailsView, ContactsView, ShopView, AboutView, AddToCart, WishListView, \
 	CartView, RemoveItemFromCart, CheckOutView, BuyItNow, AddToFavorites, AddCouponView, PaymentView, FinishOrder, \
-	order_success
+	order_success, UserOrders, UserOrderDetails
 
 urlpatterns = [
 	path('', HomePage.as_view(), name='view home'),
@@ -24,4 +24,6 @@ urlpatterns = [
 	path('payment/<payment_option>/', PaymentView.as_view(), name='view payment'),
 	path('finish/', FinishOrder.as_view(), name='finish order'),
 	path('order-completed/', order_success, name='completed order'),
+	path('my-orders/', UserOrders.as_view(), name='view orders'),
+	path('my-orders/<ref_code>/', UserOrderDetails.as_view(), name='view order'),
 ]

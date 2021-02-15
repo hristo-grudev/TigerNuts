@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block body %}
+<section class="ftco-section ftco-degree-bg">
+    <div class="container">
+        <div class="row">
+            <div class="ftco-animate">
+                <div class="row">
+                    {% for order in object_list %}
+                    <div class="d-flex ftco-animate">
+                        <div class="align-self-stretch d-md-flex">
+                            <div class="text d-block pl-md-4">
+                                <div class="meta mb-3">
+                                    <div>Поръчка №: {{order.ref_code}}</div>
+                                    <div>Дата: {{order.ordered_date}}</div>
+                                    <div>Брой артикули: {{order.items.count}}</div>
+                                    <div><a href="{% url 'view order' order.ref_code %}" class="btn btn-primary py-2 px-3">Виж</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

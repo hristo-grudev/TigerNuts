@@ -33,7 +33,7 @@ class Item(models.Model):
 
     def first_image(self):
         image = ItemImages.objects.filter(title=self.pk).first()
-        return image
+        return image.image
 
     def get_add_to_cart_url(self):
         return reverse("add-to-cart", kwargs={

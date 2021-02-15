@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% load cart_template_tags %}
+
+{% block body %}
+<div class="hero-wrap hero-bread" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span>Количка</span>
+                </p>
+                <h1 class="mb-0 bread">Количка</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="ftco-section ftco-cart">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 ftco-animate">
+                <div class="cart-list">
+                    <table class="table">
+                        <thead class="thead-primary">
+                        <tr class="text-center">
+                            <th></th>
+                            <th>Продукт</th>
+                            <th>Цена</th>
+                            <th>Количество</th>
+                            <th>Общо</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in items %}
+
+
+                        {% for i in item.items.all %}
+                        <tr class="text-center">
+                            <td class="image-prod"><a href="{% url 'view item' i.item.slug %}" class="img" style="background-image: url('{% static i.item.first_image %}');"></a></td>
+                            <td><a href="{% url 'view item' i.item.slug %}">{{i.item}}</a></td>
+                            <td>{{i.get_item_price}} лв.</td>
+                            <td>{{i.quantity}} бр.</td>
+                            <td>{{i.get_total_item_price}} лв.</td>
+                        </tr>
+                        {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <table class="table">
+                        <thead class="thead-primary">
+                        <th colspan="2">Доставка</th>
+                        </thead>
+                        <tr class="text-center">
+                            <td>Имена и телефон:</td>
+                            <td>{{items.0.shipping_address.first_name}} {{items.0.shipping_address.last_name}} -
+                                {{items.0.shipping_address.phone}}
+                            </td>
+                        </tr>
+                        <tr class="text-center">
+                            <td>Адрес за доставка:</td>
+                            <td>{{items.0.shipping_address.country}}, {{items.0.shipping_address.town}},
+                                {{items.0.shipping_address.street_address}}
+                                {{items.0.shipping_address.apartment_address}}
+                            </td>
+                        </tr>
+                        <tr class="text-center">
+                            <td>e-mail:</td>
+                            <td>{{items.0.shipping_address.email}}</td>
+                        </tr>
+
+                    </table>
+                    <table class="table">
+                        <thead class="thead-primary">
+                        <th colspan="2">Крайна цена</th>
+                        </thead>
+                        <tr class="text-center">
+                            <td>Поръчка:</td>
+                            <td>{{items.0.get_total|floatformat:2|intcomma}} лв.</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td>Доставка:</td>
+                            <td>{{items.0.get_shipping|floatformat:2|intcomma}} лв.</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td>Отстъпка:</td>
+                            {% if items.0.coupon %}
+                            <td>-{{items.0.coupon.amount|floatformat:2|intcomma}} лв.</td>
+                            {% else %}}
+                            <td>0 лв.</td>
+                            {% endif %}
+                        </tr>
+                        <tr class="text-center">
+                            <td>Общо:</td>
+                            <td>{{items.0.get_final_price|floatformat:2|intcomma}} лв.</td>
+                        </tr>
+
+                    </table>
+                    <a href="{% url 'view orders' %}" class="btn btn-black py-3 px-5">Всички поръчки</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
