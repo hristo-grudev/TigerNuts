@@ -1,11 +1,15 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
 from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView
 from django.db import transaction
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views import View
+from django.views.generic import CreateView, UpdateView, DetailView
 
-from .forms import RegisterForm, LoginForm, ProfileForm
+from .forms import RegisterForm, LoginForm, ProfileForm, ProfileUpdateForm, PassChangeForm
+from .models import UserProfile
 
 
 def get_user(request):
@@ -103,3 +107,48 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('view home')
+
+
+class PasswordsChangeView(PasswordChangeView):
+    form_class = PassChangeForm
+    template_name = 'change-password.html'
+    success_url = reverse_lazy('password_changed')
+
+
+def password_changed(request):
+    return render(request, 'password_changed.html', {})
+
+
+class ProfileView(UpdateView):
+    form_class = ProfileUpdateForm
+    template_name = 'edit_profile.html'
+    success_url = reverse_lazy('view home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile_data = UserProfile.objects.filter(user=self.request.user)[0]
+        initial_dict = {
+            'date_of_birth': profile_data.date_of_birth,
+            'profile_image': profile_data.profile_image,
+        }
+        profile_form = ProfileForm(initial=initial_dict)
+        context['profile_form'] = profile_form
+        return context
+
+    def get_object(self):
+        return self.request.user
+
+
+class ShowProfilePageView(DetailView):
+    Model = UserProfile
+    template_name = 'user_profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        page_user = get_object_or_404(UserProfile, id=self.kwargs['pk'])
+
+        context["page_user"] = page_user
+        return context
+
+    def get_object(self):
+        return self.request.user

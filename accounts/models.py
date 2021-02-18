@@ -11,3 +11,14 @@ class UserProfile(models.Model):
         blank=True,
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.user)
+
+
+class Subscribers(models.Model):
+    emial = models.EmailField()
+    subscribed = models.BooleanField(default=True)
+
+    def __str__(self):
+        return str(self.emial)

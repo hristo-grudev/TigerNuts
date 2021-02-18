@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+<div class="hero-wrap hero-bread" style="background-image: url('{% static 'images/bg_1.jpg' %}');">
+    <div class="container">
+        <div class="row no-gutters slider-text align-items-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center">
+                <p class="breadcrumbs"><span class="mr-2"><a href="{% url 'view home' %}">Начало</a></span> <span>Профил</span>
+                </p>
+                <h1 class="mb-0 bread">Профил</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row d-flex justify-content-center">
+
+
+    <ul class="messages">
+        {% for msg in messages %}
+
+        <li>
+            <div class="alert alert-{{msg.level_tag}}" role="alert">
+                {{msg.message}}
+            </div>
+        </li>
+
+        {% endfor %}
+    </ul>
+
+    <form class="bg-white p-5 contact-form" method="post" enctype="multipart/form-data">
+
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ profile_form.as_p }}
+
+        <input type="submit" value="Обнови профил" class="btn btn-primary py-3 px-5">
+    </form>
+</div>
+
+<h1>{{user.userprofile.date_of_birth}}</h1>
+
+{% endblock %}
