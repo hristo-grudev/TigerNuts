@@ -1,4 +1,6 @@
 from django import forms
+
+from accounts.models import Subscribers
 from .models import Item, OrderItem, Address
 
 PAYMENT_CHOICES = (
@@ -92,3 +94,17 @@ class PaymentForm(forms.Form):
     stripeToken = forms.CharField(required=False)
     save = forms.BooleanField(required=False)
     use_default = forms.BooleanField(required=False)
+
+
+class SubscriberForm(forms.ModelForm):
+    class Meta:
+        model = Subscribers
+        fields = ('email', )
+
+    def __init__(self, *args, **kwargs):
+        super(SubscriberForm, self).__init__(*args, **kwargs)
+
+        self.fields['email'].widget.attrs['class'] = 'form-control'
+        self.fields['email'].widget.attrs['placeholder'] = "Въведи e-mail адрес"
+        self.fields['email'].widget.attrs['type'] = "text"
+        self.fields['email'].label = ''

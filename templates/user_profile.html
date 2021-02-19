@@ -17,10 +17,21 @@
 
 <div class="row d-flex justify-content-center">
 
-{{page_user}}
-
+<div class="card mb-3">
+    <div class="row no-gutters">
+        <div class="col-md-2">
+        <img src="/media/{{user.userprofile.profile_image}}" clas="card-img">
+        </div>
+    </div>
+</div>
+<div class="col-md-10">
+    <div class="card-body">
+        <h5 class="card-title">
+            {{page_user.date_of_birth}}
+        </h5>
+    </div>
 </div>
 
-<h1>{{user.userprofile.date_of_birth}}</h1>
+</div>
 
 {% endblock %}

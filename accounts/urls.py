@@ -2,7 +2,7 @@ from django.contrib.auth import views
 from django.urls import path
 
 from accounts.views import login_user, logout_user, register_user, PasswordsChangeView, ProfileView, password_changed, \
-	ShowProfilePageView
+	ShowProfilePageView, Subscribe
 
 urlpatterns = [
 	path('adduser/', register_user, name='adduser'),
@@ -14,5 +14,6 @@ urlpatterns = [
 	path('password_changed/', password_changed, name="password_changed"),
 	path('profile_edit/', ProfileView.as_view(), name='edit profile'),
 	path('profile/<int:pk>/', ShowProfilePageView.as_view(), name='view profile'),
+	path('subscribe/', Subscribe.as_view(), name='subscribe'),
 
 ]

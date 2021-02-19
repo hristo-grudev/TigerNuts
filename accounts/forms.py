@@ -72,7 +72,7 @@ class ProfileUpdateForm(UserChangeForm):
 		self.fields['username'].label = "Потребителско име:"
 		self.fields['username'].help_text = None
 		self.fields['password'].label = 'Парола:'
-		# self.fields['password'].help_text = None
+		# self.fields['password'].help_text = '<a href="{}">this form</a>.'
 		self.fields['first_name'].widget.attrs['class'] = 'form-control'
 		self.fields['first_name'].label = "Име:"
 		self.fields['last_name'].widget.attrs['class'] = 'form-control'

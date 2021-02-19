@@ -6,9 +6,11 @@
                 <span>Получи e-mail за нашите оферти в магази на ни.</span>
             </div>
             <div class="col-md-6 d-flex align-items-center">
-                <form action="#" class="subscribe-form">
+                <form action="{% url 'subscribe' %}" class="subscribe-form" method="post">
+                    {% csrf_token %}
+
                     <div class="form-group d-flex">
-                        <input type="text" class="form-control" placeholder="Въведи Е-мейл адрес">
+                        {{subscribe_form}}
                         <input type="submit" value="Запиши се" class="submit px-3">
                     </div>
                 </form>

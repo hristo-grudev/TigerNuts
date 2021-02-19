@@ -13,6 +13,10 @@ class OrderAdmin(admin.ModelAdmin):
                     ]
 
 
+class SubscribersAdmin(admin.ModelAdmin):
+    list_display = ['email', 'subscribed', ]
+
+
 class AddressAdmin(admin.ModelAdmin):
     list_display = [
         'user',
@@ -29,7 +33,7 @@ class AddressAdmin(admin.ModelAdmin):
 admin.site.register(Item)
 admin.site.register(ItemImages)
 admin.site.register(UserProfile)
-admin.site.register(Subscribers)
+admin.site.register(Subscribers, SubscribersAdmin)
 admin.site.register(OrderItem)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Address, AddressAdmin)

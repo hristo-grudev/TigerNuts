@@ -17,8 +17,8 @@ class UserProfile(models.Model):
 
 
 class Subscribers(models.Model):
-    emial = models.EmailField()
+    email = models.EmailField()
     subscribed = models.BooleanField(default=True)
 
     def __str__(self):
-        return str(self.emial)
+        return str(self.email)

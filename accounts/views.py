@@ -3,13 +3,15 @@ from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView
 from django.db import transaction
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView, UpdateView, DetailView
 
+from common.forms import SubscriberForm
 from .forms import RegisterForm, LoginForm, ProfileForm, ProfileUpdateForm, PassChangeForm
-from .models import UserProfile
+from .models import UserProfile, Subscribers
 
 
 def get_user(request):
@@ -55,7 +57,7 @@ def register_user(request):
     else:
         device = request.COOKIES['device']
         user_exist = User.objects.filter(username__exact=device).first()
-        if user_exist.username == device:
+        if user_exist and user_exist.username == device:
             user_form = RegisterForm(data=request.POST, instance=user_exist)
         else:
             user_form = RegisterForm(data=request.POST)
@@ -66,6 +68,8 @@ def register_user(request):
             profile = profile_form.save(commit=False)  # не го запазва преди да направи връзката 1 към 1
             profile.user = user
             profile.save()
+
+            subscribed, created = Subscribers.objects.get_or_create(email=user.email)
 
             login(request, user)  # login user
             return redirect('view home')
@@ -148,7 +152,23 @@ class ShowProfilePageView(DetailView):
         page_user = get_object_or_404(UserProfile, id=self.kwargs['pk'])
 
         context["page_user"] = page_user
+        print(page_user.date_of_birth)
         return context
 
     def get_object(self):
         return self.request.user
+
+
+class Subscribe(View):
+    def post(self, *args, **kwargs):
+        form = SubscriberForm(self.request.POST or None)
+        if form.is_valid():
+            email = form.cleaned_data.get("email")
+            subscribed, created = Subscribers.objects.get_or_create(email=email)
+            if subscribed.subscribed:
+                subscribed.subscribed = False
+                subscribed.save()
+            else:
+                subscribed.subscribed = True
+                subscribed.save()
+            return HttpResponseRedirect(self.request.META.get('HTTP_REFERER'))

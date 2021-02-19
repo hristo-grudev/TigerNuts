@@ -12,7 +12,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
 from django.core.mail import EmailMultiAlternatives
 
-from .forms import ItemForm, CheckoutForm, CouponForm
+from .forms import ItemForm, CheckoutForm, CouponForm, SubscriberForm
 from .models import Item, ItemImages, OrderItem, WishList, Order, Address, Coupon, Payment
 
 def create_ref_code():
@@ -64,7 +64,9 @@ class HomePage(ListView):
                          'description': item.description,
                          'image': image.image})
         context['data'] = data
-        print(data)
+
+        subscribe_form = SubscriberForm
+        context['subscribe_form'] = subscribe_form
 
         user = get_user(self.request, False)
         context['user'] = user
@@ -79,7 +81,6 @@ class ItemDetailsView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.request.POST)
         item = context['item']
         item_id = item.id
         images = ItemImages.objects.filter(title__exact=item_id).values('image')
@@ -152,7 +153,6 @@ class AddToCart(View):
         if not quantity:
             quantity = 1
 
-        print(user, quantity)
         order_item, created = OrderItem.objects.get_or_create(
             item=item,
             user=user,
@@ -187,7 +187,6 @@ class BuyItNow(View):
         if not quantity:
             quantity = 1
         user = get_user(request, True)
-        print(user, quantity)
         order_item, created = OrderItem.objects.get_or_create(
             item=item,
             user=user,
