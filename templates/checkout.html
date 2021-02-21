@@ -135,16 +135,17 @@
                                 </div>
                             </div>
                             {% endfor %}
-                            </form>
+
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <div class="checkbox">
-                                        <label><input type="checkbox" value="" class="mr-2"> Прочетох и разбрах
-                                            политиката за поверителност с подробна и допълнителна информация и съм
+                                        <label><input type="checkbox" value="" class="mr-2" required> Прочетох и разбрах
+                                            <a href="{% url 'view terms' %}">политиката за поверителност</a> с подробна и допълнителна информация и съм
                                             съгласен/а с нея.</label>
                                     </div>
                                 </div>
                             </div>
+                            </form>
                             <p>
                                 <button class="btn btn-primary py-3 px-4" type="submit" form="myform">
                                     Изпрати поръчка

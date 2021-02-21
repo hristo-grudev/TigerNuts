@@ -9,7 +9,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.generic import ListView, DetailView
-from django.views.generic.base import View
+from django.views.generic.base import View, TemplateView
 from django.core.mail import EmailMultiAlternatives
 
 from .forms import ItemForm, CheckoutForm, CouponForm, SubscriberForm
@@ -41,6 +41,10 @@ def get_user(request, create):
             user = User.objects.filter(username__exact=device).first()
 
     return user
+
+
+class TermsView(TemplateView):
+    template_name = 'terms-and-conditions.html'
 
 
 class HomePage(ListView):
@@ -436,8 +440,8 @@ class AddToFavorites(View):
 
 def get_coupon(request, code):
     try:
-        coupon = Coupon.objects.get(code=code)
-        return coupon
+        coupon = Coupon.objects.filter(code=code).get()
+        return coupon.code
     except ObjectDoesNotExist:
         return redirect("view cart")
 
@@ -453,10 +457,8 @@ class AddCouponView(View):
                     user=user, ordered=False)
                 order.coupon = get_coupon(self.request, code)
                 order.save()
-                messages.success(self.request, "Successfully added coupon")
                 return redirect("view cart")
             except ObjectDoesNotExist:
-                messages.info(self.request, "You do not have an active order")
                 return redirect("view cart")
 
 

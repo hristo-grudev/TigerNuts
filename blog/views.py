@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -135,6 +137,8 @@ class CreateArticle(LoginRequiredMixin, CreateView):
 
 	def form_valid(self, form):
 		form.instance.author_id = self.request.user.id
+		text = form.instance.description
+		form.instance.description = '<p>' + re.sub('\n', '</p>\n<p>', text) + '</p>'
 		return super().form_valid(form)
 
 	def get_context_data(self, **kwargs):

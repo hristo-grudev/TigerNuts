@@ -2,7 +2,7 @@ from django.urls import path
 
 from common.views import HomePage, ItemDetailsView, ContactsView, ShopView, AboutView, AddToCart, WishListView, \
 	CartView, RemoveItemFromCart, CheckOutView, BuyItNow, AddToFavorites, AddCouponView, PaymentView, FinishOrder, \
-	order_success, UserOrders, UserOrderDetails
+	order_success, UserOrders, UserOrderDetails, TermsView
 
 urlpatterns = [
 	path('', HomePage.as_view(), name='view home'),
@@ -10,6 +10,7 @@ urlpatterns = [
 	path('shop/', ShopView.as_view(), name='view shop'),
 	path('shop/<slug:slug>', ItemDetailsView.as_view(), name='view item'),
 	path('about/', AboutView.as_view(), name='view about'),
+	path('terms-and-conditions/', TermsView.as_view(), name='view terms'),
 	path('wishlist/', WishListView.as_view(), name='view wishlist'),
 	path('cart/', CartView.as_view(), name='view cart'),
 	path('add-to-cart/<slug:slug>/', AddToCart.as_view(), name='add-to-cart'),
