@@ -17,63 +17,82 @@
 </div>
 <section class="ftco-section">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6 mb-5 ftco-animate">
-                <a href="{% static image %}" class="image-popup"><img src="{% static image %}" class="img-fluid"
-                                                                      alt="Tigernuts"></a>
-            </div>
-            <div class="col-lg-6 product-details pl-md-5 ftco-animate">
-                <h3>{{object.title}}</h3>
-<!--                <div class="rating d-flex">-->
-<!--                    <p class="text-left mr-4">-->
-<!--                        <a href="#" class="mr-2">5.0</a>-->
-<!--                        <a href="#"><span class="ion-ios-star-outline"></span></a>-->
-<!--                        <a href="#"><span class="ion-ios-star-outline"></span></a>-->
-<!--                        <a href="#"><span class="ion-ios-star-outline"></span></a>-->
-<!--                        <a href="#"><span class="ion-ios-star-outline"></span></a>-->
-<!--                        <a href="#"><span class="ion-ios-star-outline"></span></a>-->
-<!--                    </p>-->
-<!--                    <p class="text-left mr-4">-->
-<!--                        <a href="#" class="mr-2" style="color: #000;">100 <span style="color: #bbb;">Rating</span></a>-->
-<!--                    </p>-->
-<!--                    <p class="text-left">-->
-<!--                        <a href="#" class="mr-2" style="color: #000;">500 <span style="color: #bbb;">Sold</span></a>-->
-<!--                    </p>-->
-<!--                </div>-->
-                <p class="price">
-                    <del>{{object.price|floatformat:2|intcomma}} лв.</del>
-                    <span class="price-sale">{{object.discount_price|floatformat:2|intcomma}} лв.</span></p>
-                <p>{{object.description}}
-                </p>
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                    <div class="single_product_thumb">
+                        <div id="product_details_slider" class="carousel slide" data-ride="carousel">
 
-                <div class="w-100"></div>
-                <form method="get" action="{% url 'add-to-cart' object.slug %}">
-                    {% csrf_token %}
+                            <!-- Carousel Inner -->
+                            <div class="carousel-inner">
+                                {% for image in images %}
+                                    {% if forloop.first %}
+                                        <div class="carousel-item active">
+                                    {% else %}
+                                        <div class="carousel-item">
+                                    {% endif %}
+                                    <a class="gallery_img" href="{% static image.image %}" title="{{forloop.counter}} Slide">
+                                        <img class="d-block w-100" src="{% static image.image %}" alt="{{forloop.counter}} slide" style="height:400px">
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
 
-                    <div class="input-group col-md-6 d-flex mb-3">
-                    <span class="input-group-btn mr-2">
-                    <button type="button" class="quantity-left-minus btn" data-type="minus" data-field="">
-                    <i class="ion-ios-remove"></i>
-                    </button>
-                    </span>
-
-                        {{form}}
-                        <span class="input-group-btn ml-2">
-                        <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
-                            <i class="ion-ios-add"></i>
-                        </button>
-                    </span>
+                            <!-- Carosel Indicators -->
+                            <ol class="carousel-indicators">
+                                {% for image in images %}
+                                    {% if forloop.first %}
+                                        <li data-target="#product_details_slider" data-slide-to="{{forloop.counter0}}" style="background-image: url({% static image.image %}); background-size: cover; height:40px; width:40px;" class="active"></li>
+                                    {% else %}
+                                        <li data-target="#product_details_slider" data-slide-to="{{forloop.counter0}}" style="background-image: url({% static image.image %}); background-size: cover; height:40px; width:40px;" class=""></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ol>
+                        </div>
                     </div>
-                    <div class="w-100"></div>
-                    <div class="col-md-12">
-                        <p style="color: #000;">Tags for develop</p>
-                    </div>
+                </div>
 
+                <!-- Single Product Description -->
+                <div class="col-12 col-lg-6">
+                    <div class="single_product_desc">
+                        <h4 class="title mb-2">{{object.title}}</h4>
+
+                        <h4 class="price mb-4"><del>{{object.price|floatformat:2|intcomma}} лв.</del>
+                    <span class="price-sale">{{object.discount_price|floatformat:2|intcomma}} лв.</span></h4>
+
+                        <!-- Overview -->
+                        <div class="short_overview mb-4">
+                            <h6>Описание</h6>
+                            <p>{{object.description}}</p>
+                        </div>
+                        <div class="tagcloud">
+                            <a href="#" class="tag-cloud-link">Tags for develop</a>
+                        </div>
+
+
+                        <!-- Add to Cart Form -->
+                        <form class="cart clearfix my-5 d-flex flex-wrap align-items-center" method="get" action="{% url 'add-to-cart' object.slug %}">
+                            {% csrf_token %}
+                            <div class="input-group col-md-6 d-flex mb-3">
+                            <span class="input-group-btn mr-2">
+                            <button type="button" class="quantity-left-minus btn" data-type="minus" data-field="">
+                            <i class="ion-ios-remove"></i>
+                            </button>
+                            </span>
+
+                                {{form}}
+                                <span class="input-group-btn ml-2">
+                                <button type="button" class="quantity-right-plus btn" data-type="plus" data-field="">
+                                    <i class="ion-ios-add"></i>
+                                </button>
+                            </span>
+                            </div>
+                            <button type="submit" name="addtocart" value="5" class="btn btn-primary mt-1 mt-md-0 ml-1 ml-md-3">Добави в количката</button>
+                        </form>
+
+                    </div>
+                </div>
             </div>
-            <button class="btn btn-black py-3 px-5" type="submit">Добави в количката</button>
-            </form>
         </div>
-    </div>
 </section>
 
 {% endblock %}

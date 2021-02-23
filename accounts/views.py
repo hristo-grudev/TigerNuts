@@ -3,10 +3,11 @@ from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView
 from django.db import transaction
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import View
+from django.views.decorators.http import require_GET
 from django.views.generic import CreateView, UpdateView, DetailView
 
 from common.forms import SubscriberForm
@@ -172,3 +173,13 @@ class Subscribe(View):
                 subscribed.subscribed = True
                 subscribed.save()
             return HttpResponseRedirect(self.request.META.get('HTTP_REFERER'))
+
+
+@require_GET
+def robots_txt(request):
+    lines = [
+        "User-Agent: *",
+        "Disallow: /admin/",
+        "Disallow: /junk/",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")

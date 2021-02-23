@@ -87,8 +87,10 @@ class ItemDetailsView(DetailView):
         context = super().get_context_data(**kwargs)
         item = context['item']
         item_id = item.id
-        images = ItemImages.objects.filter(title__exact=item_id).values('image')
-        context['image'] = images[0]['image']
+        images = ItemImages.objects.filter(title__exact=item_id)
+        for im in images:
+            print(im.image)
+        context['images'] = images
         context['form'] = ItemForm  # marker
 
         user = get_user(self.request, False)

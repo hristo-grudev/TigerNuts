@@ -314,10 +314,12 @@
 
 	function makeTimer() {
 
-		var endTime = new Date("01 February 2021 00:00:00 GMT+02:00");
+		var now = new Date();
+
+
+		var endTime = now.getDate() - (now.getDay() - 1) + 6;
 		endTime = (Date.parse(endTime) / 1000);
 
-		var now = new Date();
 		now = (Date.parse(now) / 1000);
 
 		var timeLeft = endTime - now;

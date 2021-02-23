@@ -975,3 +975,29 @@ div.sku strong{
 .product.large:hover{
 	box-shadow:0px 5px 31px -1px rgba(0, 0, 0, 0.15);
 }
+
+/* Product Details CSS */
+.single_product_thumb {
+  position: relative;
+  z-index: 1; }
+  .single_product_thumb .carousel-indicators {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    bottom: 15px;
+    left: 0;
+    margin: 0;
+    width: 100%; }
+    .single_product_thumb .carousel-indicators li {
+      -webkit-transition-duration: 500ms;
+      -o-transition-duration: 500ms;
+      transition-duration: 500ms;
+      width: 50px;
+      height: 50px;
+      border: 2px solid #070a57;
+      background-position: center center;
+      background-size: cover; }
+      .single_product_thumb .carousel-indicators li.active {
+        border-color: #0f99f3; }
+  .single_product_thumb .product_badge {
+    top: 30px; }
