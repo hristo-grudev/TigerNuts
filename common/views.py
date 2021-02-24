@@ -283,6 +283,35 @@ class CartView(ListView):
         return context
 
 
+def remove_single_item_from_cart(request, slug):
+    item = get_object_or_404(Item, slug=slug)
+    user = get_user(request, False)
+    order_qs = Order.objects.filter(
+        user=user,
+        ordered=False
+    )
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.items.filter(item__slug=item.slug).exists():
+            order_item = OrderItem.objects.filter(
+                item=item,
+                user=user,
+                ordered=False
+            )[0]
+            if order_item.quantity > 1:
+                order_item.quantity -= 1
+                order_item.save()
+            else:
+                order.items.remove(order_item)
+                order_item.delete()
+            return redirect("view cart")
+        else:
+            return redirect("view item", slug=slug)
+    else:
+        return redirect("view item", slug=slug)
+
+
 class RemoveItemFromCart(View):
 
     def get(self, request, **kwargs):
@@ -440,10 +469,11 @@ class AddToFavorites(View):
 
 def get_coupon(request, code):
     try:
-        coupon = Coupon.objects.filter(code=code).get()
-        return coupon.code
+        coupon = Coupon.objects.get(code=code)
+        return coupon
     except ObjectDoesNotExist:
-        return redirect("view cart")
+        print('Not exist')
+        return None
 
 
 class AddCouponView(View):
@@ -455,8 +485,10 @@ class AddCouponView(View):
                 code = form.cleaned_data.get('code')
                 order = Order.objects.get(
                     user=user, ordered=False)
-                order.coupon = get_coupon(self.request, code)
-                order.save()
+                code_for_discount = get_coupon(self.request, code)
+                if code_for_discount:
+                    order.coupon = code_for_discount
+                    order.save()
                 return redirect("view cart")
             except ObjectDoesNotExist:
                 return redirect("view cart")
@@ -475,37 +507,6 @@ class PaymentView(ListView):
         context['user'] = user
 
         return context
-
-
-def remove_single_item_from_cart(request, slug):
-    item = get_object_or_404(Item, slug=slug)
-    user = get_user(request, False)
-    order_qs = Order.objects.filter(
-        user=user,
-        ordered=False
-    )
-    if order_qs.exists():
-        order = order_qs[0]
-        # check if the order item is in the order
-        if order.items.filter(item__slug=item.slug).exists():
-            order_item = OrderItem.objects.filter(
-                item=item,
-                user=user,
-                ordered=False
-            )[0]
-            if order_item.quantity > 1:
-                order_item.quantity -= 1
-                order_item.save()
-            else:
-                order.items.remove(order_item)
-            messages.info(request, "This item quantity was updated.")
-            return redirect("view cart")
-        else:
-            messages.info(request, "This item was not in your cart")
-            return redirect("view item", slug=slug)
-    else:
-        messages.info(request, "You do not have an active order")
-        return redirect("view item", slug=slug)
 
 
 class FinishOrder(View):

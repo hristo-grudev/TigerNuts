@@ -47,8 +47,19 @@
                             <td class="price">{{item.discount_price|floatformat:2|intcomma}} лв.</td>
                             <td class="quantity">
                                 <div class="input-group mb-3">
-                                    <input type="number" name="quantity" class="quantity form-control input-number"
-                                           value="{{item.quantity}}" min="1" max="100">
+                                    <span class="input-group-btn mr-2">
+                                        <a href="{% url 'remove_single_item_from_cart' item.slug %}" class="btn py-3 px-4" data-type="minus">
+                                            <i class="ion-ios-remove"></i>
+                                        </a>
+                                    </span>
+                                        <input type="text" name="quantity" class="quantity form-control input-number"
+                                               value="{{item.quantity}}" min="1" max="100">
+
+                                    <span class="input-group-btn ml-2">
+                                        <a href="{% url 'add-to-cart' item.slug %}" class="btn py-3 px-4" data-type="plus">
+                                            <i class="ion-ios-add"></i>
+                                        </a>
+                                    </span>
                                 </div>
                             </td>
                             <td class="total">{{item.total|floatformat:2|intcomma}} лв.</td>

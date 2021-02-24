@@ -2,7 +2,7 @@ from django.urls import path
 
 from common.views import HomePage, ItemDetailsView, ContactsView, ShopView, AboutView, AddToCart, WishListView, \
 	CartView, RemoveItemFromCart, CheckOutView, BuyItNow, AddToFavorites, AddCouponView, PaymentView, FinishOrder, \
-	order_success, UserOrders, UserOrderDetails, TermsView
+	order_success, UserOrders, UserOrderDetails, TermsView, remove_single_item_from_cart
 
 urlpatterns = [
 	path('', HomePage.as_view(), name='view home'),
@@ -16,9 +16,9 @@ urlpatterns = [
 	path('add-to-cart/<slug:slug>/', AddToCart.as_view(), name='add-to-cart'),
 	# path('add-to-cart/<slug:slug>/', AddToCart.as_view(), name='add-to-cart'),
 	path('remove-from-cart/<slug:slug>/', RemoveItemFromCart.as_view(), name='remove-from-cart'),
-	# path('remove-from-cart/<slug:slug>/', RemoveItemFromCart.as_view(), name='remove-from-cart'),
+	path('remove_single_item_from_cart/<slug:slug>/', remove_single_item_from_cart, name='remove_single_item_from_cart'),
 	path('checkout/', CheckOutView.as_view(), name='view checkout'),
-	path('buy-it-now/<slug:slug>/', BuyItNow.as_view(), name='buy-it-now'),
+	# path('buy-it-now/<slug:slug>/', BuyItNow.as_view(), name='buy-it-now'),
 	path('add-to-favorites/<slug:slug>/', AddToFavorites.as_view(), name='add-to-favorites'),
 	path('coupon/', AddCouponView.as_view(), name='add coupon'),
 	# path('summary/', OrderSummaryView.as_view(), name='view summary'),
