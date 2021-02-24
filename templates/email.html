@@ -74,7 +74,7 @@
                         </thead>
                         <tr class="text-center">
                             <td>Поръчка:</td>
-                            <td>{{shipping.get_total|floatformat:2|intcomma}} лв.</td>
+                            <td>{{shipping.get_total.0|floatformat:2|intcomma}} лв.</td>
                         </tr>
                         <tr class="text-center">
                             <td>Доставка:</td>
@@ -83,7 +83,7 @@
                         <tr class="text-center">
                             <td>Отстъпка:</td>
                             {% if shipping.coupon %}
-                            <td>-{{shipping.coupon.amount|floatformat:2|intcomma}} лв.</td>
+                            <td>-{{shipping.get_discount|floatformat:2|intcomma}} лв.</td>
                             {% else %}
                             <td>0 лв.</td>
                             {% endif %}
