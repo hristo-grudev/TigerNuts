@@ -115,14 +115,16 @@ class Order(models.Model):
 
     def get_total(self):
         total = 0
+        quantity = 0
         for order_item in self.items.all():
+            quantity += order_item.quantity
             total += order_item.get_total_item_price()
-        return total
+        return total, quantity
 
     def get_discount(self):
         discount = 0
-        if len(self.items.all()) > 1:
-            discount += self.get_total()*0.05
+        if self.get_total()[1] > 1:
+            discount += self.get_total()[0]*0.05
         if self.coupon:
             discount += self.coupon.amount
 
@@ -130,7 +132,7 @@ class Order(models.Model):
 
     def get_shipping(self):
         shipping = 0
-        total = self.get_total()-self.get_discount()
+        total = self.get_total()[0]-self.get_discount()
         if self.coupon:
             total -= self.coupon.amount
         if total <= 100:
@@ -139,7 +141,7 @@ class Order(models.Model):
         return shipping
 
     def get_final_price(self):
-        total = self.get_total()
+        total = self.get_total()[0]
         shipping = self.get_shipping()
         final_price = total + shipping - self.get_discount()
         return final_price

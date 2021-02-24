@@ -100,7 +100,7 @@
                             <h3 class="billing-heading mb-4">Количка</h3>
                             <p class="d-flex">
                                 <span>Междинна сума</span>
-                                <span>{{items.0.get_total|floatformat:2|intcomma}} лв.</span>
+                                <span>{{items.0.get_total.0|floatformat:2|intcomma}} лв.</span>
                             </p>
                             <p class="d-flex">
                                 <span>Доставка</span>
@@ -108,7 +108,7 @@
                             </p>
                             <p class="d-flex">
                                 <span>Отстъпка</span>
-                                {% if items.0.coupon.amount %}
+                                {% if items.0.get_discount %}
                                 <span>-{{items.0.get_discount|floatformat:2|intcomma}} лв.</span>
                                 {% else %}
                                 <span>0.00 лв.</span>
