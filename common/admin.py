@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from accounts.models import UserProfile, Subscribers
-from common.models import Item, ItemImages, OrderItem, Address, WishList, Coupon, Order, Payment, PaymentStripe
+from common.models import Item, ItemImages, OrderItem, Address, WishList, Coupon, Order, Payment, PaymentStripe, Tags
 
 
 class OrderAdmin(admin.ModelAdmin):
@@ -41,3 +41,4 @@ admin.site.register(WishList)
 admin.site.register(Coupon)
 admin.site.register(Payment)
 admin.site.register(PaymentStripe)
+admin.site.register(Tags)

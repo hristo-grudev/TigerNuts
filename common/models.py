@@ -17,6 +17,13 @@ COUNTRY_CHOICES = (
 )
 
 
+class Tags(models.Model):
+    tag = models.CharField(max_length=50)
+
+    def __str__(self):
+        return str(self.tag)
+
+
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
@@ -24,9 +31,10 @@ class Item(models.Model):
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
     slug = models.SlugField()
     description = models.TextField()
+    tag = models.ManyToManyField(Tags)
 
     class Meta:
-        verbose_name_plural = 'images'
+        verbose_name_plural = 'items'
 
     def __str__(self):
         return str(self.title)
@@ -111,9 +119,20 @@ class Order(models.Model):
             total += order_item.get_total_item_price()
         return total
 
+    def get_discount(self):
+        discount = 0
+        if len(self.items.all()) > 1:
+            discount += self.get_total()*0.05
+        if self.coupon:
+            discount += self.coupon.amount
+
+        return discount
+
     def get_shipping(self):
         shipping = 0
-        total = self.get_total()
+        total = self.get_total()-self.get_discount()
+        if self.coupon:
+            total -= self.coupon.amount
         if total <= 100:
             shipping = 5
 
@@ -122,9 +141,7 @@ class Order(models.Model):
     def get_final_price(self):
         total = self.get_total()
         shipping = self.get_shipping()
-        final_price = total + shipping
-        if self.coupon:
-            final_price -= self.coupon.amount
+        final_price = total + shipping - self.get_discount()
         return final_price
 
 

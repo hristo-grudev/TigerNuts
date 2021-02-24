@@ -64,8 +64,12 @@
                             <h6>Описание</h6>
                             <p>{{object.description}}</p>
                         </div>
-                        <div class="tagcloud">
-                            <a href="#" class="tag-cloud-link">Tags for develop</a>
+                        <div class="row">
+                        {% for tag in item.tag.all %}
+                            <div class="tagcloud">
+                                <a href="#" class="tag-cloud-link">{{tag}}</a>
+                            </div>
+                        {% endfor %}
                         </div>
 
 

@@ -31,10 +31,12 @@
                     <img src="/media/{{object.image}}" alt="" class="img-fluid">
                 </p>
 
-                <div class="tag-widget post-tag-container mb-5 mt-5">
+                <div class="row">
+                    {% for tag in object.tag.all %}
                     <div class="tagcloud">
-                        <a href="#" class="tag-cloud-link">{{object.author}}</a>
+                        <a href="#" class="tag-cloud-link">{{tag}}</a>
                     </div>
+                    {% endfor %}
                 </div>
 
                 <div class="pt-5 mt-5">

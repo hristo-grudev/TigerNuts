@@ -82,7 +82,7 @@
                         <tr class="text-center">
                             <td>Отстъпка:</td>
                             {% if items.0.coupon %}
-                            <td>-{{items.0.coupon.amount|floatformat:2|intcomma}} лв.</td>
+                            <td>-{{items.0.get_discount|floatformat:2|intcomma}} лв.</td>
                             {% else %}}
                             <td>0 лв.</td>
                             {% endif %}

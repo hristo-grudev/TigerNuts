@@ -109,7 +109,7 @@
                             <p class="d-flex">
                                 <span>Отстъпка</span>
                                 {% if items.0.coupon.amount %}
-                                <span>-{{items.0.coupon.amount|floatformat:2|intcomma}} лв.</span>
+                                <span>-{{items.0.get_discount|floatformat:2|intcomma}} лв.</span>
                                 {% else %}
                                 <span>0.00 лв.</span>
                                 {% endif %}

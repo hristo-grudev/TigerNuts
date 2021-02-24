@@ -313,15 +313,17 @@
 
 
 	function makeTimer() {
+	    var curr = new Date; // get current date
+	    var today = new Date(curr.getFullYear(), curr.getMonth(), curr.getDate(), 23, 59, 59);
+        var first = today.getDate() - today.getDay(); // First day is the day of the month - the day of the week
+        var last = first + 6; // last day is the first day + 6
 
+        var endTime = new Date(today.setDate(last)).toUTCString();
 		var now = new Date();
 
-
-		var endTime = now.getDate() - (now.getDay() - 1) + 6;
 		endTime = (Date.parse(endTime) / 1000);
 
 		now = (Date.parse(now) / 1000);
-
 		var timeLeft = endTime - now;
 
 		var days = Math.floor(timeLeft / 86400);

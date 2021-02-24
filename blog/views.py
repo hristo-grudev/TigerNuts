@@ -51,7 +51,6 @@ class SingleArticleView(DetailView):
 		form = CommentForm()
 		user = get_user(self.request)
 		comments = ArticleComments.objects.filter(article_title__exact=context['object'])
-		cart_items = OrderItem.objects.filter(user=user).filter(ordered=False).count()
 		comments_count = ArticleComments.objects.filter(article_title__exact=context['object']).count()
 
 		if user:

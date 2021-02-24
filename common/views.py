@@ -88,8 +88,6 @@ class ItemDetailsView(DetailView):
         item = context['item']
         item_id = item.id
         images = ItemImages.objects.filter(title__exact=item_id)
-        for im in images:
-            print(im.image)
         context['images'] = images
         context['form'] = ItemForm  # marker
 
